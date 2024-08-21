@@ -16,7 +16,7 @@ RUN npm run build
 FROM node:20-slim
 
 # OpenSSL 설치
-RUN apt-get update && apt-get install -y openssl libssl1.1 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y openssl libssl3 && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
