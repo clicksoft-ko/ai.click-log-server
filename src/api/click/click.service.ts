@@ -7,11 +7,11 @@ import { dbNow } from '@/shared/utils/date.util';
 export class ClickService {
   constructor(private prisma: PrismaService) { }
 
-  saveErrorLog(dto: SaveErrorLogDto, ip: string) {
+  saveErrorLog(dto: SaveErrorLogDto, ip: string | undefined) {
     return this.prisma.errorLog.create({
       data: {
         ykiho: dto.ykiho,
-        computerName: dto.computerName, 
+        computerName: dto.computerName,
         applicationName: dto.applicationName,
         logLevel: dto.logLevel,
         errorMessage: dto.errorMessage,
