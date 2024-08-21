@@ -9,18 +9,20 @@ export class ClickController {
   constructor(private readonly clickService: ClickService) { }
 
   private getIp(req: Request): string | undefined {
-    console.log(req.headers);
-    
     const xOriginForwardedFor = req.headers['x-original-forwarded-for'] as string;
     let ip = xOriginForwardedFor?.split(":")[0];
+    console.log('xOriginForwardedFor', ip);
     if (!ip) return ip;
     const xForwardedFor = req.headers['x-forwarded-for'] as string;
     ip = xForwardedFor?.split(',')[0].trim();
+    console.log('xForwardedFor', ip);
     if (!ip) return ip;
     ip = req.headers['x-real-ip'] as string;
+    console.log('x-real-ip', ip);
     if (!ip) return ip;
     return req.ip as string;
   }
+
   @Post("/error-log")
   @ZodValidate(ErrorLogSchema)
   saveErrorLog(@Body() dto: SaveErrorLogDto, @Req() req: Request) {
