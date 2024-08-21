@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Ip } from '@nestjs/common';
+import { ZodValidate } from '@/common/decorators/zod-validate';
+import { Body, Controller, Ip, Post } from '@nestjs/common';
 import { ClickService } from './click.service';
 import { ErrorLogSchema, SaveErrorLogDto } from './dto/save-error-log.dto';
-import { ZodValidate } from '@/common/decorators/zod-validate';
 
 @Controller('click')
 export class ClickController {
@@ -12,5 +12,4 @@ export class ClickController {
   saveErrorLog(@Body() dto: SaveErrorLogDto, @Ip() ip: string) {
     return this.clickService.saveErrorLog(dto, ip);
   }
-
 }
