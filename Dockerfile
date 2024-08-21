@@ -28,6 +28,7 @@ RUN corepack enable pnpm && pnpm install --prod --frozen-lockfile
 
 # 빌드된 파일만 복사
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
 
 # 환경 변수 및 포트 설정
 EXPOSE 3000
