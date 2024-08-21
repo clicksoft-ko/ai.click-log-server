@@ -8,10 +8,12 @@ export class AppController {
 
   @Get()
   getHello(@Req() req: Request) {
-    const xForwardedFor = req.headers['x-forwarded-for'] as string;
+    const xOriginForwardedFor = req.headers['x-original-forwarded-for'] as string;
+    const xForwardedFor = req.headers['x-original-forwarded-for'] as string;
     const clientIp =
       xForwardedFor?.split(',')[0].trim();
     const realIp = req.headers['x-real-ip'];
-    return { clientIp, realIp, xForwardedFor, headers: req.headers }
+    
+    return { xOriginForwardedFor, clientIp, realIp, xForwardedFor, headers: req.headers }
   }
 }
