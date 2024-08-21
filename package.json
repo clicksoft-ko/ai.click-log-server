@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prebuild": "npm run prisma:generate",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -13,7 +14,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "generate": "npx prisma generate --schema=./prisma/click-schema.prisma",
+    "prisma:generate": "npx prisma generate --schema=./prisma/click-schema.prisma",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
