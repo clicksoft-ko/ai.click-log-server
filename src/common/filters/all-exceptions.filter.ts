@@ -27,13 +27,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       this.logger.warn({ err: errorResponse });
     }
 
-    res.status(status).json({
-      statusCode: status,
-      timestamp: new Date().toISOString(),
-      path: req.url,
-      message,
-      errors,
-    });
+    res.status(status).json(errorResponse);
   }
 
   getStatus(exception: unknown) {
