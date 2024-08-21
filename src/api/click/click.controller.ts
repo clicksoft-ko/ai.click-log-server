@@ -10,16 +10,20 @@ export class ClickController {
 
   private getIp(req: Request): string | undefined {
     const xOriginForwardedFor = req.headers['x-original-forwarded-for'] as string;
-    let ip = xOriginForwardedFor?.split(":")[0];
-    console.log('xOriginForwardedFor', ip);
-    if (!ip) return ip;
+    if (xOriginForwardedFor) {
+      return xOriginForwardedFor.split(":")[0];
+    }
+
     const xForwardedFor = req.headers['x-forwarded-for'] as string;
-    ip = xForwardedFor?.split(',')[0].trim();
-    console.log('xForwardedFor', ip);
-    if (!ip) return ip;
-    ip = req.headers['x-real-ip'] as string;
-    console.log('x-real-ip', ip);
-    if (!ip) return ip;
+    if (xForwardedFor) {
+      return xForwardedFor.split(',')[0].trim()
+    }
+
+    const realIp = req.headers['x-real-ip'] as string;
+    if (realIp) {
+      return realIp;
+    }
+
     return req.ip as string;
   }
 
