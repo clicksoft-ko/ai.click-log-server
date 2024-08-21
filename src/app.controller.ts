@@ -12,6 +12,6 @@ export class AppController {
     const clientIp =
       xForwardedFor?.split(',')[0].trim();
     const realIp = req.headers['x-real-ip'];
-    return { clientIp, realIp }
+    return { clientIp, realIp, xForwardedFor }
   }
 }
