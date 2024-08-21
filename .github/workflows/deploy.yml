@@ -29,13 +29,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install 
 
-      - name: Set environment variables
+      - name: Run tests
         env:
           NODE_ENV: test
           CLICK_DATABASE_URL: ${{ secrets.CLICK_DATABASE_URL }}
-        run: echo "Environment variables are set"
-
-      - name: Run tests
         run: pnpm test:e2e
       
       - name: Login to Docker Hub
