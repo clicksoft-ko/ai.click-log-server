@@ -15,21 +15,15 @@ describe('Auth (e2e)', () => {
     const response = await request(app.getHttpServer())
       .post("/click/error-log")
       .send({
-        "ykiho": "10001000", 
+        "ykiho": "10001000",
+        "computerName": "test컴퓨터",
         "applicationName": "TestApp",
         "logLevel": "ERROR",
         "errorMessage": "An unexpected error occurred.",
         "stackTrace": "Error: Something went wrong at main.js:25:13",
         "source": "main.js",
         "additionalData": {
-          "userId": 987,
-          "transactionId": "abc123xyz",
-          "meta": {
-            "ip": "192.168.0.1",
-            "browser": "Chrome",
-            "version": "89.0.4389.82"
-          },
-          "tags": ["critical", "backend"]
+          "userId": "987",
         }
       } satisfies SaveErrorLogDto)
 

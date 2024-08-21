@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Ip } from '@nestjs/common';
 import { ClickService } from './click.service';
 import { ErrorLogSchema, SaveErrorLogDto } from './dto/save-error-log.dto';
 import { ZodValidate } from '@/common/decorators/zod-validate';
@@ -9,8 +9,8 @@ export class ClickController {
 
   @Post("/error-log")
   @ZodValidate(ErrorLogSchema)
-  saveErrorLog(@Body() dto: SaveErrorLogDto) {
-    return this.clickService.saveErrorLog(dto);
+  saveErrorLog(@Body() dto: SaveErrorLogDto, @Ip() ip: string) {
+    return this.clickService.saveErrorLog(dto, ip);
   }
 
 }

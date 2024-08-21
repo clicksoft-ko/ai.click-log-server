@@ -11,7 +11,7 @@ export class LoggerContextMiddleware implements NestMiddleware {
     const { ip, method, originalUrl, headers } = req;
     const userAgent = req.get('user-agent');
     const startDt = Date.now();
-    
+
     res.on('finish', () => {
       const { statusCode } = res;
       const formattedDate = dayjs(startDt).format('YYYY-MM-DD HH:mm:ss');

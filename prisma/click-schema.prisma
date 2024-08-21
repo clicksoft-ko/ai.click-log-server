@@ -17,6 +17,7 @@ datasource db {
 model ErrorLog {
   id              Int      @id @default(autoincrement()) @map("id")
   ykiho           String   @map("ykiho") @db.VarChar(8)
+  computerName    String   @map("computer_name") @db.VarChar(50)
   applicationName String   @map("application_name") @db.VarChar(255)
   logLevel        String   @map("log_level") @db.VarChar(50)
   errorMessage    String   @map("error_message") @db.Text
