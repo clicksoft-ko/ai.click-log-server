@@ -32,7 +32,7 @@ jobs:
       - name: Set environment variables
         env:
           NODE_ENV: test
-          CLICK_DATABASE_URL: postgres://username:password@localhost:5432/mydatabase
+          CLICK_DATABASE_URL: ${{ secrets.CLICK_DATABASE_URL }}
         run: echo "Environment variables are set"
 
       - name: Run tests
