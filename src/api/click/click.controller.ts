@@ -9,6 +9,8 @@ export class ClickController {
   constructor(private readonly clickService: ClickService) { }
 
   private getIp(req: Request): string | undefined {
+    console.log(req.headers);
+    
     const xOriginForwardedFor = req.headers['x-original-forwarded-for'] as string;
     let ip = xOriginForwardedFor?.split(":")[0];
     if (!ip) return ip;
