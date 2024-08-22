@@ -5,6 +5,7 @@ export const ErrorLogSchema = z.object({
   computerName: z.string().max(50), // VarChar(255)에 대응
   applicationName: z.string().max(255), // VarChar(255)에 대응
   logLevel: z.string().max(50), // VarChar(50)에 대응
+  exceptionType: z.string().max(50),
   errorMessage: z.string(), // Text 필드에 대응
   stackTrace: z.string().nullable(), // Nullable Text 필드에 대응
   source: z.string().max(255).nullable(), // VarChar(255)이고 nullable  

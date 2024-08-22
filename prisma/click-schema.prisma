@@ -20,6 +20,7 @@ model ErrorLog {
   computerName    String   @map("computer_name") @db.VarChar(50)
   applicationName String   @map("application_name") @db.VarChar(255)
   logLevel        String   @map("log_level") @db.VarChar(50)
+  exceptionType   String   @map("exception_type") @db.VarChar(50)
   errorMessage    String   @map("error_message") @db.Text
   stackTrace      String?  @map("stack_trace") @db.Text
   source          String?  @map("source") @db.VarChar(255)

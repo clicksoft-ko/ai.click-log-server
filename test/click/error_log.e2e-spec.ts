@@ -19,15 +19,15 @@ describe('Auth (e2e)', () => {
         "computerName": "test컴퓨터",
         "applicationName": "TestApp",
         "logLevel": "ERROR",
+        "exceptionType": "textException",
         "errorMessage": "An unexpected error occurred.",
         "stackTrace": "Error: Something went wrong at main.js:25:13",
         "source": "main.js",
         "additionalData": {
           "userId": "987",
         }
-      } satisfies SaveErrorLogDto)
+      } satisfies SaveErrorLogDto).expect(201);
 
-    console.log(response);
-
+    expect(response.body.ykiho).toBe("10001000");
   });
 });
