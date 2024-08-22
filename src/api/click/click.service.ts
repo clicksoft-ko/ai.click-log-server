@@ -12,7 +12,6 @@ export class ClickService {
       data: {
         ykiho: dto.ykiho,
         computerName: dto.computerName,
-        applicationName: dto.applicationName,
         logLevel: dto.logLevel,
         exceptionType: dto.exceptionType,
         errorMessage: dto.errorMessage,

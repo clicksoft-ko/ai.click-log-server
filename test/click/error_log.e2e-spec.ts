@@ -17,7 +17,6 @@ describe('Auth (e2e)', () => {
       .send({
         "ykiho": "10001000",
         "computerName": "test컴퓨터",
-        "applicationName": "TestApp",
         "logLevel": "ERROR",
         "exceptionType": "textException",
         "errorMessage": "An unexpected error occurred.",
