@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { SaveErrorLogDto } from './dto/save-error-log.dto';
 import { PrismaService } from '@/database/prisma/prisma.service';
-import { dbNow } from '@/shared/utils/date.util';
 
 @Injectable()
 export class ClickService {
@@ -16,8 +15,7 @@ export class ClickService {
         exceptionType: dto.exceptionType,
         errorMessage: dto.errorMessage,
         stackTrace: dto.stackTrace || null,
-        source: dto.source || null,
-        createdAt: dbNow(),
+        source: dto.source || null, 
         additionalData: { ...dto.additionalData, ip },
       },
     });
