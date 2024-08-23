@@ -18,6 +18,7 @@ export class ClickService {
         stackTrace: dto.stackTrace || null,
         source: dto.source || null,
         additionalData: { ...dto.additionalData, ip },
+        clientVersion: dto.clientVersion,
       },
     });
   }
