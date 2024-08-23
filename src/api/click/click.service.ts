@@ -11,11 +11,12 @@ export class ClickService {
       data: {
         ykiho: dto.ykiho,
         computerName: dto.computerName,
+        moduleName: dto.moduleName,
         logLevel: dto.logLevel,
         exceptionType: dto.exceptionType,
         errorMessage: dto.errorMessage,
         stackTrace: dto.stackTrace || null,
-        source: dto.source || null, 
+        source: dto.source || null,
         additionalData: { ...dto.additionalData, ip },
       },
     });
