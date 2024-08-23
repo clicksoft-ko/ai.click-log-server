@@ -26,6 +26,7 @@ model ErrorLog {
   source         String?  @map("source") @db.VarChar(255)
   createdAt      DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   additionalData Json?    @map("additional_data")
+  clientVersion  String   @default("") @map("client_version") @db.VarChar(20)
 
   @@map("error_logs")
 }

@@ -25,7 +25,8 @@ describe('Auth (e2e)', () => {
         "source": "main.js",
         "additionalData": {
           "userId": "987",
-        }
+        },
+        "clientVersion": "V00010001"
       } satisfies SaveErrorLogDto).expect(201);
 
     expect(response.body.ykiho).toBe("10001000");
