@@ -1,11 +1,12 @@
 import { ZodValidate } from '@/common/decorators/zod-validate';
-import { Body, Controller, Ip, Post, Req, Res } from '@nestjs/common';
-import { ClickService } from './click.service';
-import { ErrorLogSchema, SaveErrorLogDto } from './dto/save-error-log.dto';
-import { Request } from 'express';
 import { getIp } from '@/shared/utils/ip.util';
+import { Body, Controller, Post, Req } from '@nestjs/common';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
+import { ClickService } from './click.service';
 import { ErrorLogDto } from './dto/error-log.dto';
+import { ErrorLogSchema, SaveErrorLogDto } from './dto/save-error-log.dto';
+
 @ApiTags("Click")
 @Controller('click')
 export class ClickController {
@@ -15,7 +16,6 @@ export class ClickController {
     description: 'The record has been successfully created.',
     type: ErrorLogDto,
   })
-  
   @Post("/error-log")
   @ZodValidate(ErrorLogSchema)
   saveErrorLog(@Body() dto: SaveErrorLogDto, @Req() req: Request) {
