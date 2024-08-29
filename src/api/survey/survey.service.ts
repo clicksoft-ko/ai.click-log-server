@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateSurveyDto } from './dto/create-survey.dto';
 import { CpmPrismaService } from '@/database/prisma/cpm-prisma.service';
 import { RejectSurveyDto } from './dto/reject-survey.dto';
@@ -17,7 +17,14 @@ export class SurveyService {
     return { exists: count > 0 }
   }
 
+  async validateCreate(dto: ExistsSurveyParamsDto) {
+    const isExists = await this.exists({ ...dto });
+    if (isExists) throw new BadRequestException("이미 설문조사를 했습니다.");
+  }
+
   async create(dto: CreateSurveyDto) {
+    await this.validateCreate({ ...dto });
+
     return this.prisma.customerSurvey.create({
       data: {
         ...dto,
@@ -28,6 +35,8 @@ export class SurveyService {
   }
 
   async reject(dto: RejectSurveyDto) {
+    await this.validateCreate({ ...dto });
+
     return this.prisma.customerSurvey.create({
       data: {
         ...dto,
