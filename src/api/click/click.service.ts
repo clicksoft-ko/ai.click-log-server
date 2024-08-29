@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { SaveErrorLogDto } from './dto/save-error-log.dto';
-import { PrismaService } from '@/database/prisma/prisma.service';
+import { ClickPrismaService } from '@/database/prisma/click-prisma.service';
 
 @Injectable()
 export class ClickService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: ClickPrismaService) { }
 
   saveErrorLog(dto: SaveErrorLogDto, ip: string | undefined) {
     return this.prisma.errorLog.create({

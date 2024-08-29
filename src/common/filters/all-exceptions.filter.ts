@@ -1,3 +1,4 @@
+import { ErrorResponseDto } from '@/shared/dto/error-response.dto';
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ZodError } from 'zod';
@@ -13,7 +14,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const status = this.getStatus(exception);
     const message = this.getMessage(exception);
     const errors = this.getErrors(exception);
-    const errorResponse = {
+    const errorResponse: ErrorResponseDto = {
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: req.url,
@@ -48,6 +49,17 @@ export class AllExceptionsFilter implements ExceptionFilter {
   getMessage(exception: unknown) {
     if (exception instanceof HttpException) {
       return exception.getResponse();
+    }
+
+    if (exception instanceof ZodError) {
+      const formattedIssues = exception.issues.map(issue => {
+        const path = issue.path.join('.');
+        const message = issue.message;
+        return `"${path}": ${message}`;
+      });
+
+      // Join all formatted issues into a single string
+      return `Validation error on (${formattedIssues.join('|')})`;
     }
 
     if (exception && typeof exception === "object" && "message" in exception && typeof exception.message === 'string') {

@@ -1,9 +1,10 @@
 import { Global, Module } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
+import { ClickPrismaService } from './click-prisma.service';
+import { CpmPrismaService } from './cpm-prisma.service';
 
 @Global()
 @Module({
-  providers: [PrismaService],
-  exports: [PrismaService],
+  providers: [ClickPrismaService, CpmPrismaService],
+  exports: [ClickPrismaService, CpmPrismaService],
 })
 export class PrismaModule { }

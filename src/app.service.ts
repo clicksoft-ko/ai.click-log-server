@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from './database/prisma/prisma.service';
+import { ClickPrismaService } from './database/prisma/click-prisma.service';
 
 @Injectable()
 export class AppService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: ClickPrismaService) { }
   async getHello() {
     return "hello";
   }

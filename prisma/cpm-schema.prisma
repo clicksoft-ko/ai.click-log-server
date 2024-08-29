@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/cpm-schema-client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("CPM_DATABASE_URL")
+}
+
+model CustomerSurvey {
+  id           Int      @id @default(autoincrement())
+  ver          String   @default("")
+  ykiho        String   @default("")
+  ykihoName    String   @default("") @map("ykiho_name")
+  userId       String   @default("") @map("user_id")
+  bu           String   @default("")
+  buName       String   @default("") @map("bu_name")
+  sebu         String   @default("")
+  sebuName     String   @default("") @map("sebu_name")
+  computerName String   @default("") @map("computer_name")
+  reject       Boolean  @default(false)
+  surveyDate   DateTime @default(now()) @map("survey_date")
+  q1_1         Int      @default(0)
+  q1_2         Int      @default(0)
+  q1_3         Int      @default(0)
+  q2_1         Int      @default(0)
+  q2_2         Int      @default(0)
+  q2_3         Int      @default(0)
+  q3_1         Int      @default(0)
+  q3_2         Int      @default(0)
+  q4_1         Int      @default(0)
+  q4_2         Int      @default(0)
+  q4_3         Int      @default(0)
+  text1        String?
+  text2        String?
+
+  @@map("customer_survey")
+}
