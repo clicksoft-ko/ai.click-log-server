@@ -18,8 +18,8 @@ export class SurveyService {
   }
 
   async validateCreate(dto: ExistsSurveyParamsDto) {
-    const isExists = await this.exists({ ...dto });
-    if (isExists) throw new BadRequestException("이미 설문조사를 했습니다.");
+    const res = await this.exists({ ...dto });
+    if (res.exists) throw new BadRequestException("이미 설문조사를 했습니다.");
   }
 
   async create(dto: CreateSurveyDto) {
