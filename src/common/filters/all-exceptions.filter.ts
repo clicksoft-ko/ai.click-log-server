@@ -48,7 +48,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
   getMessage(exception: unknown) {
     if (exception instanceof HttpException) {
-      return exception.getResponse();
+      const exceptionResponse = exception.getResponse();
+      return typeof exceptionResponse == 'string'
+        ? exceptionResponse
+        : exceptionResponse['message'] as string;
     }
 
     if (exception instanceof ZodError) {

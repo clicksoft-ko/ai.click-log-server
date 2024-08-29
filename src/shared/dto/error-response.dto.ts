@@ -22,7 +22,7 @@ export class ErrorResponseDto {
     description: '오류 메시지',
     example: 'Validation error on ("data": Required)',
   })
-  message: string | object;
+  message: string;
 
   @ApiProperty({
     description: '유효성 검사 오류가 발생한 필드와 해당 오류 메시지 목록',
