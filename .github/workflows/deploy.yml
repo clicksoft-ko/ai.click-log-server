@@ -33,6 +33,7 @@ jobs:
         env:
           NODE_ENV: test
           CLICK_DATABASE_URL: ${{ secrets.CLICK_DATABASE_URL }}
+          CPM_DATABASE_URL: ${{ secrets.CPM_DATABASE_URL }}
         run: pnpm test:e2e
       
       - name: Login to Docker Hub
