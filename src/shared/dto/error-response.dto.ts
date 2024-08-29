@@ -32,6 +32,7 @@ export class ErrorResponseDto {
       items: { type: 'string' },
       example: ["Required"]
     },
+    required: false,
   })
   errors?: Record<string, string[] | undefined>;
 }
