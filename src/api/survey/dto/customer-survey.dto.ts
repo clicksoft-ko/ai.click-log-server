@@ -9,15 +9,9 @@ export class CustomerSurveyDto implements CustomerSurvey {
   @ApiProperty()
   ykiho: string;
   @ApiProperty()
-  ykihoName: string;
-  @ApiProperty()
   userId: string;
   @ApiProperty()
-  bu: string;
-  @ApiProperty()
   buName: string;
-  @ApiProperty()
-  sebu: string;
   @ApiProperty()
   sebuName: string;
   @ApiProperty()
