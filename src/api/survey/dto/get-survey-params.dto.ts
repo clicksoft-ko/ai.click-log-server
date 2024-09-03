@@ -2,8 +2,8 @@ import { ApiProperty } from "@nestjs/swagger";
 import { z } from "zod";
 
 export const getSurveyParamsSchema = z.object({
-  ykiho: z.string(),
-  userId: z.string(),
+  ykiho: z.string().min(1),
+  userId: z.string().min(1),
 });
 
 export class GetSurveyParamsDto implements z.infer<typeof getSurveyParamsSchema> {   
