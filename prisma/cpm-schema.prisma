@@ -40,3 +40,11 @@ model CustomerSurvey {
 
   @@map("customer_survey")
 }
+
+model SurveyPeriod {
+  ver  String @id @default("") @map("ver")
+  symd String @unique @default("") @map("symd")
+  eymd String @default("") @map("eymd")
+
+  @@map("survey_period")
+}

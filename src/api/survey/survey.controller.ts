@@ -1,15 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Headers, UseGuards } from '@nestjs/common';
-import { SurveyService } from './survey.service';
-import { CreateSurveyDto, createSurveySchema } from './dto/create-survey.dto';
 import { ZodValidate } from '@/common/decorators/zod-validate';
-import { RejectSurveyDto, rejectSurveySchema } from './dto/reject-survey.dto';
 import { ZodValidationPipe } from '@/common/pipes/zod-validation.pipe';
-import { ExistsSurveyParamsDto, existsSurveyParamsSchema } from './dto/exists-survey-params.dto';
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiHeader, ApiHeaders, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
-import { ExistsSurveyResponseDto } from './dto/exists-survey-response.dto';
 import { ErrorResponseDto } from '@/shared/dto/error-response.dto';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CreateSurveyDto, createSurveySchema } from './dto/create-survey.dto';
 import { CustomerSurveyDto } from './dto/customer-survey.dto';
+import { GetSurveyResponseDto } from './dto/get-survey-response.dto';
+import { RejectSurveyDto, rejectSurveySchema } from './dto/reject-survey.dto';
 import { SurveyHeaderGuard } from './guards/survey-header.guard';
+import { SurveyService } from './survey.service';
+import { GetSurveyParamsDto, getSurveyParamsSchema } from './dto/get-survey-params.dto';
+import { koDayjs, usDayjs } from '@/shared/utils/date.util';
+import * as dayjs from 'dayjs';
 
 @ApiTags("Survey (만족도 설문조사)")
 @ApiHeader({
@@ -24,21 +26,18 @@ export class SurveyController {
 
   @ApiResponse({
     status: 200,
-    description: '설문조사 작성했을 시',
-    type: ExistsSurveyResponseDto,
-    example: {
-      exists: true,
-    }
+    description: '설문조사 기간이고 설문조사를 작성하지 않은 경우',
+    type: GetSurveyResponseDto,
   })
   @ApiBadRequestResponse({
-    description: '잘못된 응답',
+    description: '설문조사 기간이 아니거나 설문조사를 이미 작성한 경우',
     type: ErrorResponseDto,
   })
-  @Get("/exists")
-  async exists(
-    @Query(new ZodValidationPipe(existsSurveyParamsSchema)) query: ExistsSurveyParamsDto) {
+  @Get("/")
+  async getSurvey(
+    @Query(new ZodValidationPipe(getSurveyParamsSchema)) query: GetSurveyParamsDto) {
 
-    return this.surveyService.exists(query);
+    return this.surveyService.getSurvey(query);
   }
 
   @ApiCreatedResponse({ description: "저장 성공", type: CustomerSurveyDto })

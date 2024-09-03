@@ -2,28 +2,41 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateSurveyDto } from './dto/create-survey.dto';
 import { CpmPrismaService } from '@/database/prisma/cpm-prisma.service';
 import { RejectSurveyDto } from './dto/reject-survey.dto';
-import { dbNow } from '@/shared/utils/date.util';
-import { ExistsSurveyParamsDto } from './dto/exists-survey-params.dto';
+import { dbNow, koDayjs } from '@/shared/utils/date.util';
+import { GetSurveyParamsDto } from './dto/get-survey-params.dto';
 
 @Injectable()
 export class SurveyService {
+
   constructor(private prisma: CpmPrismaService) { }
 
-  async exists(query: ExistsSurveyParamsDto) {
-    const count = await this.prisma.customerSurvey.count({
-      where: { ver: query.ver, ykiho: query.ykiho, userId: query.userId }
-    })
+  async getSurvey(query: GetSurveyParamsDto) {
+    const ymd = koDayjs().format("YYYYMMDD");
+    const surveyPeriod = await this.prisma.surveyPeriod.findFirst({
+      where: {
+        symd: { lte: ymd },
+        eymd: { gte: ymd },
+      }
+    });
 
-    return { exists: count > 0 }
+    if (!surveyPeriod) {
+      throw new BadRequestException("설문조사 기간이 아닙니다.")
+    }
+
+    await this.#validateCreate({ ver: surveyPeriod.ver, userId: query.userId, ykiho: query.ykiho });
+
+    return surveyPeriod;
   }
 
-  async validateCreate(dto: ExistsSurveyParamsDto) {
-    const res = await this.exists({ ...dto });
-    if (res.exists) throw new BadRequestException("이미 설문조사를 했습니다.");
+  async #validateCreate(args: ExistsSurveyArgs) {
+    const count = await this.prisma.customerSurvey.count({
+      where: { ...args }
+    })
+    if (count > 0) throw new BadRequestException("이미 설문조사를 했습니다.");
   }
 
   async create(dto: CreateSurveyDto) {
-    await this.validateCreate({ ...dto });
+    await this.#validateCreate({ ...dto });
 
     return this.prisma.customerSurvey.create({
       data: {
@@ -35,7 +48,7 @@ export class SurveyService {
   }
 
   async reject(dto: RejectSurveyDto) {
-    await this.validateCreate({ ...dto });
+    await this.#validateCreate({ ...dto });
 
     return this.prisma.customerSurvey.create({
       data: {
@@ -46,3 +59,4 @@ export class SurveyService {
     })
   }
 }
+
