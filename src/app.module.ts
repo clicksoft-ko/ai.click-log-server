@@ -6,9 +6,10 @@ import { globalFilterProviders } from './common/filters/global-filter-providers'
 import { PrismaModule } from './database/prisma/prisma.module';
 import { ConfigModule } from './config/config.module';
 import { SurveyModule } from './api/survey/survey.module';
+import { MonitoringModule } from './modules/monitoring/monitoring.module';
 
 @Module({
-  imports: [ConfigModule, ClickModule, PrismaModule, SurveyModule],
+  imports: [ConfigModule, ClickModule, PrismaModule, SurveyModule, MonitoringModule],
   controllers: [AppController],
   providers: [...globalFilterProviders, AppService, Logger],
 })
