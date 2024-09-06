@@ -20,7 +20,7 @@ export class PrometheusInterceptor implements NestInterceptor, OnModuleInit {
   private readonly requestSuccessHistogram = new Histogram({
     name: 'nestjs_success_requests',
     help: 'NestJs success requests - duration in seconds',
-    labelNames: ['handler', 'controller', 'method'],
+    labelNames: ['path', 'method'],
     buckets: [
       0.0001, 0.001, 0.005, 0.01, 0.025, 0.05, 0.075, 0.09, 0.1, 0.25, 0.5, 1,
       2.5, 5, 10,
@@ -31,7 +31,7 @@ export class PrometheusInterceptor implements NestInterceptor, OnModuleInit {
   private readonly requestFailHistogram = new Histogram({
     name: 'nestjs_fail_requests',
     help: 'NestJs fail requests - duration in seconds',
-    labelNames: ['handler', 'controller', 'method'],
+    labelNames: ['path', 'method'],
     buckets: [
       0.0001, 0.001, 0.005, 0.01, 0.025, 0.05, 0.075, 0.09, 0.1, 0.25, 0.5, 1,
       2.5, 5, 10,
@@ -41,7 +41,7 @@ export class PrometheusInterceptor implements NestInterceptor, OnModuleInit {
   private readonly failureCounter = new Counter({
     name: 'nestjs_requests_failed_count',
     help: 'NestJs requests that failed',
-    labelNames: ['handler', 'controller', 'error', 'method'],
+    labelNames: ['path', 'error', 'method'],
   });
 
   static registerServiceInfo(serviceInfo: {
@@ -95,11 +95,11 @@ export class PrometheusInterceptor implements NestInterceptor, OnModuleInit {
         error: () => {
           if (this.isAvailableMetricsUrl(req.path)) {
             requestFailTimer();
-            this.failureCounter.labels({ ...labels }).inc(1);
           }
         },
       }),
       catchError((err) => {
+        this.failureCounter.labels({ ...labels, error: err }).inc(1);
         return throwError(() => err);
       }),
     );
