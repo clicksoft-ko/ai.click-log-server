@@ -99,7 +99,7 @@ export class PrometheusInterceptor implements NestInterceptor, OnModuleInit {
         },
       }),
       catchError((err) => {
-        this.failureCounter.labels({ ...labels, error: err }).inc(1);
+        this.failureCounter.labels({ ...labels, error: err.name }).inc(1);
         return throwError(() => err);
       }),
     );
