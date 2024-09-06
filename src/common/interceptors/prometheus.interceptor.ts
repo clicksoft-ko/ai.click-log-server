@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Counter, Gauge, Histogram } from 'prom-client';
 import { catchError, Observable, tap, throwError } from 'rxjs';
+import { Request } from 'express'
 
 @Injectable()
 export class PrometheusInterceptor implements NestInterceptor, OnModuleInit {
@@ -74,12 +75,10 @@ export class PrometheusInterceptor implements NestInterceptor, OnModuleInit {
   }
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const originUrl = context.switchToHttp().getRequest().url.toString();
-    const method = context.switchToHttp().getRequest().method.toString();
+    const req = context.switchToHttp().getRequest() as Request;
     const labels = {
-      controller: context.getClass().name,
-      handler: context.getHandler().name,
-      method: method,
+      path: req.path,
+      method: req.method,
     };
 
     const requestSuccessTimer =
@@ -89,12 +88,12 @@ export class PrometheusInterceptor implements NestInterceptor, OnModuleInit {
     return next.handle().pipe(
       tap({
         next: () => {
-          if (this.isAvailableMetricsUrl(originUrl)) {
+          if (this.isAvailableMetricsUrl(req.path)) {
             requestSuccessTimer();
           }
         },
         error: () => {
-          if (this.isAvailableMetricsUrl(originUrl)) {
+          if (this.isAvailableMetricsUrl(req.path)) {
             requestFailTimer();
             this.failureCounter.labels({ ...labels }).inc(1);
           }

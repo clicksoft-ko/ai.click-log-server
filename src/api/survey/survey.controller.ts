@@ -5,13 +5,11 @@ import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateSurveyDto, createSurveySchema } from './dto/create-survey.dto';
 import { CustomerSurveyDto } from './dto/customer-survey.dto';
+import { GetSurveyParamsDto, getSurveyParamsSchema } from './dto/get-survey-params.dto';
 import { GetSurveyResponseDto } from './dto/get-survey-response.dto';
 import { RejectSurveyDto, rejectSurveySchema } from './dto/reject-survey.dto';
 import { SurveyHeaderGuard } from './guards/survey-header.guard';
 import { SurveyService } from './survey.service';
-import { GetSurveyParamsDto, getSurveyParamsSchema } from './dto/get-survey-params.dto';
-import { koDayjs, usDayjs } from '@/shared/utils/date.util';
-import * as dayjs from 'dayjs';
 
 @ApiTags("Survey (만족도 설문조사)")
 @ApiHeader({
