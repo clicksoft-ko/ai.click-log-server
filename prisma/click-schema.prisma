@@ -30,3 +30,12 @@ model ErrorLog {
 
   @@map("error_logs")
 }
+
+model SettingRecord {
+  id        Int      @id @default(autoincrement()) @map("id")
+  ykiho     String   @unique @map("ykiho") @db.VarChar(8)
+  data      Json     @map("data")
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@map("setting_records")
+}

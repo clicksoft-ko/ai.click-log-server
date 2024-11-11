@@ -14,14 +14,14 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Click Log API')
-    .setDescription('클릭소프트 로그 수집 API 입니다.')
+    .setDescription('클릭소프트 로그 API 입니다.')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/swagger', app, document);
-  console.log(process.env.NODE_ENV);
 
   const port = process.env.NODE_ENV === 'production' ? 3000 : 8080;
+  console.log(`Server is running on port ${port}`);
   await app.listen(port);
 }
 bootstrap();
