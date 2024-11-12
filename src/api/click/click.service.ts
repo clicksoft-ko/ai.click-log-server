@@ -9,6 +9,17 @@ import { SaveSettingResponseDto } from './dto/setting-record.dto';
 export class ClickService {
   constructor(private prisma: ClickPrismaService) { }
 
+  getErrorLog({ startDate, endDate }: { startDate: string, endDate: string }) {
+    const isoStartDate = new Date(startDate);
+    const isoEndDate = new Date(endDate);
+
+    return this.prisma.errorLog.findMany({
+      where: {
+        createdAt: { gte: isoStartDate, lte: isoEndDate },
+      }
+    });
+  }
+
   saveErrorLog(dto: SaveErrorLogDto, ip: string | undefined) {
     return this.prisma.errorLog.create({
       data: {

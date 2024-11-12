@@ -2,7 +2,7 @@ import { ZodValidate } from '@/common/decorators/zod-validate';
 import { ZodValidationPipe } from '@/common/pipes/zod-validation.pipe';
 import { YkihoSchema } from '@/shared/dto/ykiho.schema';
 import { getIp } from '@/shared/utils/ip.util';
-import { Body, Controller, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiCreatedResponse, ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { ClickService } from './click.service';
@@ -10,6 +10,7 @@ import { ErrorLogDto } from './dto/error-log.dto';
 import { ErrorLogSchema, SaveErrorLogDto } from './dto/save-error-log.dto';
 import { SaveSettingRecordSchema, SaveSettingRequestDto, SaveSettingResponseDto, SettingRecordDto } from './dto/setting-record.dto';
 import { ClickHeaderGuard } from './guards/click-header.guard';
+import { GetErrorLogSchema, GetErrorLogQueryDto } from './dto/get-error-log.dto';
 
 @ApiTags("(new,e)Click API")
 @Controller('click')
@@ -20,6 +21,12 @@ export class ClickController {
     description: 'The record has been successfully created.',
     type: ErrorLogDto,
   })
+
+  @Get("/error-log")
+  @ZodValidate(GetErrorLogSchema)
+  getErrorLog(@Query(new ZodValidationPipe(GetErrorLogSchema)) query: GetErrorLogQueryDto) {
+    return this.clickService.getErrorLog(query);
+  }
 
   @Post("/error-log")
   @ZodValidate(ErrorLogSchema)
