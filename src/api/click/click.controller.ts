@@ -19,9 +19,8 @@ export class ClickController {
 
   @ApiCreatedResponse({
     description: 'The record has been successfully created.',
-    type: ErrorLogDto,
+    type: [ErrorLogDto],
   })
-
   @Get("/error-log")
   @ZodValidate(GetErrorLogSchema)
   getErrorLog(@Query(new ZodValidationPipe(GetErrorLogSchema)) query: GetErrorLogQueryDto) {
