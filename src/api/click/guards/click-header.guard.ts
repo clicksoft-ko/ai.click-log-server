@@ -1,3 +1,4 @@
+import { apiHeader } from '@/constants/api-header';
 import { Injectable, CanActivate, ExecutionContext, BadRequestException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
@@ -7,10 +8,10 @@ export class ClickHeaderGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    const xTestHeader = request.headers['x-click-header'];
+    const xTestHeader = request.headers[apiHeader.click.key.toLowerCase()];
 
-    if (xTestHeader !== 'Y2xpY2stc29mdA==') {
-      throw new BadRequestException('Invalid X-Click-Header value');
+    if (xTestHeader !== apiHeader.click.value) {
+      throw new BadRequestException(`Invalid ${apiHeader.click.key} value`);
     }
 
     return true;

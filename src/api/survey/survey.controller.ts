@@ -10,10 +10,11 @@ import { GetSurveyResponseDto } from './dto/get-survey-response.dto';
 import { RejectSurveyDto, rejectSurveySchema } from './dto/reject-survey.dto';
 import { SurveyHeaderGuard } from './guards/survey-header.guard';
 import { SurveyService } from './survey.service';
+import { apiHeader } from '@/constants/api-header';
 
 @ApiTags("Survey (만족도 설문조사)")
 @ApiHeader({
-  name: 'X-Survey-Header',
+  name: apiHeader.survey.key,
   description: 'API를 사용하기 위해서 반드시 필요한 정보',
   required: true,  // 헤더가 필수임을 명시
 })

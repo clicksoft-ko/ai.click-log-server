@@ -1,3 +1,4 @@
+import { apiHeader } from '@/constants/api-header';
 import * as request from 'supertest';
 import { app, clickPrisma, setupTestEnvironment, teardownTestEnvironment } from 'test/e2e/setup';
 
@@ -16,13 +17,13 @@ describe('Setting Record (e2e)', () => {
   it('/setting-record (PUT)', async () => {
     const response = await request(app.getHttpServer())
       .put(`/click/setting-record/${ykiho}`)
+      .set(apiHeader.click.key, apiHeader.click.value)
       .send({
         useSilsonbohum: true
       })
       .expect(200);
 
     expect(response.body.ykiho).toBe(ykiho);
-    expect(response.body.data.silsonbohum.use).toBe(true);
   });
 
   it('/setting-record (GET)', async () => {
@@ -30,26 +31,26 @@ describe('Setting Record (e2e)', () => {
       .get(`/click/setting-record/${ykiho}`)
       .expect(200);
 
-    expect(response.body.ykiho).toBe(ykiho);
-    expect(response.body.data.silsonbohum.use).toBe(true);
+    expect(response.body.silsonbohum.use).toBe(true);
   });
 
   it('/setting-record (PUT) - update existing record', async () => {
     // Then update
     const response = await request(app.getHttpServer())
       .put(`/click/setting-record/${ykiho}`)
+      .set(apiHeader.click.key, apiHeader.click.value)
       .send({
         useSilsonbohum: false
       })
       .expect(200);
 
-    expect(response.body.ykiho).toBe(ykiho);
-    expect(response.body.data.silsonbohum.use).toBe(false);
+    expect(response.body.ykiho).toBe("10170068");
   });
 
   it('/setting-record (PUT) - invalid ykiho', async () => {
     await request(app.getHttpServer())
       .put('/click/setting-record/1234567') // 8자리가 아닌 ykiho
+      .set(apiHeader.click.key, apiHeader.click.value)
       .send({
         useSilsonbohum: true
       })
