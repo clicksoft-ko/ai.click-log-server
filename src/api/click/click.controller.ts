@@ -11,8 +11,7 @@ import { ErrorLogSchema, SaveErrorLogDto } from './dto/save-error-log.dto';
 import { SaveSettingRecordSchema, SaveSettingRequestDto, SaveSettingResponseDto, SettingRecordDto } from './dto/setting-record.dto';
 import { ClickHeaderGuard } from './guards/click-header.guard';
 
-
-@ApiTags("Click")
+@ApiTags("(new,e)Click API")
 @Controller('click')
 export class ClickController {
   constructor(private readonly clickService: ClickService) { }
