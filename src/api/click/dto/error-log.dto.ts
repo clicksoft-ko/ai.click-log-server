@@ -26,10 +26,10 @@ export class ErrorLogDto implements ErrorLog {
   @ApiProperty()
   errorMessage: string;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ type: String, nullable: true })
   stackTrace: string | null;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ type: String, nullable: true })
   source: string | null;
 
   @ApiProperty({
