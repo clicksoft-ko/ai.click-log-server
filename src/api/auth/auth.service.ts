@@ -13,7 +13,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const accessToken = this.jwtService.sign({ isAuthenticated: true } satisfies AuthPayloadDto);
+    const accessToken = await this.jwtService.signAsync({ isAuthenticated: true } satisfies AuthPayloadDto);
 
     return {
       accessToken,
