@@ -1,6 +1,7 @@
 import { SaveErrorLogDto } from '@/api/click/error-log/dto/save-error-log.dto';
 import { apiHeader } from '@/constants/api-header';
 import * as request from 'supertest';
+import { signinTest } from 'test/e2e/common';
 import { app, setupTestEnvironment, teardownTestEnvironment } from 'test/e2e/setup';
 
 describe('Auth (e2e)', () => {
@@ -34,9 +35,11 @@ describe('Auth (e2e)', () => {
   });
 
   it('/error-log/:id/stacktrace/ (Get)', async () => {
+    const { accessToken } = await signinTest(app);
     const response = await request(app.getHttpServer())
       .get("/click/error-log/1/stacktrace")
-      .set(apiHeader.click.key, apiHeader.click.value)  
+      .set(apiHeader.click.key, apiHeader.click.value)
+      .set('Authorization', `Bearer ${accessToken}`)
       .expect(200);
 
     expect(response.body.stackTrace).toBeDefined();
