@@ -33,12 +33,12 @@ describe('Auth (e2e)', () => {
     expect(response.body.ykiho).toBe("10001000");
   });
 
-  it('/error-log/stacktrace/:id (Get)', async () => {
+  it('/error-log/:id/stacktrace/ (Get)', async () => {
     const response = await request(app.getHttpServer())
       .get("/click/error-log/1/stacktrace")
       .set(apiHeader.click.key, apiHeader.click.value)  
       .expect(200);
 
-    expect(response.body.stacktrace).toBeDefined();
+    expect(response.body.stackTrace).toBeDefined();
   });
 });
