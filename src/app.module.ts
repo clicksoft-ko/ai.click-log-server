@@ -7,9 +7,11 @@ import { PrismaModule } from './database/prisma/prisma.module';
 import { ConfigModule } from './config/config.module';
 import { SurveyModule } from './api/survey/survey.module';
 import { MonitoringModule } from './modules/monitoring/monitoring.module';
+import { CsModule } from './api/cpm/cs/cs.module';
+import { AuthModule } from './api/auth/auth.module';
 
 @Module({
-  imports: [ConfigModule, ClickModule, PrismaModule, SurveyModule, MonitoringModule],
+  imports: [ConfigModule, ClickModule, PrismaModule, SurveyModule, MonitoringModule, CsModule, AuthModule],
   controllers: [AppController],
   providers: [...globalFilterProviders, AppService, Logger],
 })

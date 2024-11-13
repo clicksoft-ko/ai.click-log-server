@@ -1,4 +1,5 @@
 import { ZodValidate } from '@/common/decorators/zod-validate';
+import { HeaderGuard } from '@/common/guards/header.guard';
 import { ZodValidationPipe } from '@/common/pipes/zod-validation.pipe';
 import { YkihoSchema } from '@/shared/dto/ykiho.schema';
 import { getIp } from '@/shared/utils/ip.util';
@@ -7,10 +8,11 @@ import { ApiCreatedResponse, ApiHeader, ApiResponse, ApiTags } from '@nestjs/swa
 import { Request } from 'express';
 import { ClickService } from './click.service';
 import { ErrorLogDto } from './dto/error-log.dto';
+import { GetErrorLogQueryDto, GetErrorLogSchema } from './dto/get-error-log.dto';
 import { ErrorLogSchema, SaveErrorLogDto } from './dto/save-error-log.dto';
 import { SaveSettingRecordSchema, SaveSettingRequestDto, SaveSettingResponseDto, SettingRecordDto } from './dto/setting-record.dto';
-import { ClickHeaderGuard } from './guards/click-header.guard';
-import { GetErrorLogSchema, GetErrorLogQueryDto } from './dto/get-error-log.dto';
+import { apiHeader } from '@/constants/api-header';
+import { ErrorLogStacktraceDto } from './dto/error-log-stacktrace.dto';
 
 @ApiTags("(new,e)Click API")
 @Controller('click')
@@ -21,10 +23,17 @@ export class ClickController {
     description: 'The record has been successfully created.',
     type: [ErrorLogDto],
   })
+
+  @ApiHeader({
+    name: apiHeader.click.key,
+    description: 'API를 사용하기 위해서 반드시 필요한 정보',
+    required: true,
+  })
+  @UseGuards(HeaderGuard)
   @Get("/error-log")
   @ZodValidate(GetErrorLogSchema)
-  getErrorLog(@Query(new ZodValidationPipe(GetErrorLogSchema)) query: GetErrorLogQueryDto) {
-    return this.clickService.getErrorLog(query);
+  getErrorLogs(@Query(new ZodValidationPipe(GetErrorLogSchema)) query: GetErrorLogQueryDto) {
+    return this.clickService.getErrorLogs(query);
   }
 
   @Post("/error-log")
@@ -35,7 +44,22 @@ export class ClickController {
   }
 
   @ApiHeader({
-    name: 'X-Click-Header',
+    name: apiHeader.click.key,
+    description: 'API를 사용하기 위해서 반드시 필요한 정보',
+    required: true,  // 헤더가 필수임을 명시
+  })
+  @ApiResponse({
+    description: 'The stacktrace has been successfully retrieved.',
+    type: ErrorLogStacktraceDto,
+  })
+  @UseGuards(HeaderGuard)
+  @Get("/error-log/:id/stacktrace")
+  getStacktrace(@Param("id") id: string) {
+    return this.clickService.getStacktrace(parseInt(id));
+  }
+
+  @ApiHeader({
+    name: apiHeader.click.key,
     description: 'API를 사용하기 위해서 반드시 필요한 정보',
     required: true,  // 헤더가 필수임을 명시
   })
@@ -43,7 +67,7 @@ export class ClickController {
     description: 'The setting record has been successfully created or updated.',
     type: SaveSettingResponseDto,
   })
-  @UseGuards(ClickHeaderGuard)
+  @UseGuards(HeaderGuard)
   @Put("/setting-record/:ykiho")
   saveSettingRecord(
     @Param("ykiho", new ZodValidationPipe(YkihoSchema)) ykiho: string,

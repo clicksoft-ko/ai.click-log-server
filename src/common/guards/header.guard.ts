@@ -3,7 +3,7 @@ import { Injectable, CanActivate, ExecutionContext, BadRequestException } from '
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class ClickHeaderGuard implements CanActivate {
+export class HeaderGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {

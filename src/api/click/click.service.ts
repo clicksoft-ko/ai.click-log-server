@@ -9,14 +9,28 @@ import { SaveSettingResponseDto } from './dto/setting-record.dto';
 export class ClickService {
   constructor(private prisma: ClickPrismaService) { }
 
-  getErrorLog({ startDate, endDate }: { startDate: string, endDate: string }) {
+  getErrorLogs({ startDate, endDate }: { startDate: string, endDate: string }) {
     const isoStartDate = new Date(startDate);
     const isoEndDate = new Date(endDate);
 
     return this.prisma.errorLog.findMany({
       where: {
         createdAt: { gte: isoStartDate, lte: isoEndDate },
-      }
+      },
+      select: {
+        id: true,
+        createdAt: true,
+        ykiho: true,
+        computerName: true,
+        moduleName: true,
+        logLevel: true,
+        exceptionType: true,
+        errorMessage: true,
+        source: true,
+        additionalData: true,
+        clientVersion: true,
+      },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
@@ -35,6 +49,11 @@ export class ClickService {
         clientVersion: dto.clientVersion,
       },
     });
+  }
+
+  async getStacktrace(id: number) {
+    const errorLog = await this.prisma.errorLog.findUnique({ select: { stackTrace: true }, where: { id } });
+    return { stackTrace: errorLog?.stackTrace };
   }
 
   async saveSettingRecord(dto: { ykiho: string; useSilsonbohum?: boolean | undefined; }) {

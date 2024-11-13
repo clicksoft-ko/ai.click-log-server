@@ -9,7 +9,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.set('trust proxy', true);
   app.setGlobalPrefix("/api");
-
+  app.enableCors();
   app.useLogger(winstonLogger);
 
   const config = new DocumentBuilder()

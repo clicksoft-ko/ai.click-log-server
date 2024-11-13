@@ -1,4 +1,5 @@
 import { SaveErrorLogDto } from '@/api/click/dto/save-error-log.dto';
+import { apiHeader } from '@/constants/api-header';
 import * as request from 'supertest';
 import { app, setupTestEnvironment, teardownTestEnvironment } from 'test/e2e/setup';
 
@@ -30,5 +31,14 @@ describe('Auth (e2e)', () => {
       } satisfies SaveErrorLogDto).expect(201);
 
     expect(response.body.ykiho).toBe("10001000");
+  });
+
+  it('/error-log/stacktrace/:id (Get)', async () => {
+    const response = await request(app.getHttpServer())
+      .get("/click/error-log/1/stacktrace")
+      .set(apiHeader.click.key, apiHeader.click.value)  
+      .expect(200);
+
+    expect(response.body.stacktrace).toBeDefined();
   });
 });
