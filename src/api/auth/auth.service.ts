@@ -6,10 +6,10 @@ import { EnvService } from '@/modules/env/env.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly jwtService: JwtService, private readonly envService: EnvService) { }
+  constructor(private readonly jwtService: JwtService) { }
 
   async signin(dto: SigninDto) {
-    if (dto.userId !== this.envService.USER_ID || dto.password !== this.envService.PASSWORD) {
+    if (dto.userId !== "testuser" || dto.password !== "testpass") {
       throw new UnauthorizedException();
     }
 
