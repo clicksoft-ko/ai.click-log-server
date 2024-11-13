@@ -25,7 +25,6 @@ export const setupTestEnvironment = async (mockProviders: MockProvider[] = []) =
 
   const moduleFixture: TestingModule = await moduleBuilder.compile();
   clickPrisma = moduleFixture.get(ClickPrismaService);
-  envService = moduleFixture.get(EnvService);
   app = moduleFixture.createNestApplication();
   await app.init();
 };
@@ -42,7 +41,7 @@ export const setupCpmTestEnvironment = async (mockProviders: MockProvider[] = []
   const moduleFixture: TestingModule = await moduleBuilder.compile();
   cpmPrisma = moduleFixture.get(CpmPrismaService);
   envService = moduleFixture.get(EnvService);
-  
+
   app = moduleFixture.createNestApplication();
   await app.init();
 };
