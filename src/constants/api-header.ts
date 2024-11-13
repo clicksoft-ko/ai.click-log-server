@@ -1,7 +1,7 @@
 export const apiHeader = {
   click: {
-    key: process.env.CLICK_HEADER_KEY ?? "",
-    value: process.env.CLICK_HEADER_VALUE ?? "",
+    key: process.env.CLICK_HEADER_KEY ?? "X-Click-Header",
+    value: process.env.CLICK_HEADER_VALUE ?? "test",
   },
   survey: {
     key: 'X-Survey-Header',
