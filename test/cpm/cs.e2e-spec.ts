@@ -1,5 +1,6 @@
 import { apiHeader } from '@/constants/api-header';
 import * as request from 'supertest';
+import { signinTest } from 'test/e2e/common';
 import { app, setupCpmTestEnvironment, teardownTestEnvironment } from 'test/e2e/setup';
 
 describe('CPM CS (e2e)', () => {
@@ -12,9 +13,11 @@ describe('CPM CS (e2e)', () => {
   });
 
   it('/cpm/cs/names (GET)', async () => {
+    const { accessToken } = await signinTest(app);
     const response = await request(app.getHttpServer())
-      .get('/cpm/cs/names')      
+      .get('/cpm/cs/names')
       .set(apiHeader.click.key, apiHeader.click.value)
+      .set('Authorization', `Bearer ${accessToken}`)
       .expect(200);
 
     expect(response.body.totalCount).toBeDefined();

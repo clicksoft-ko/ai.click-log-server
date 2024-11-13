@@ -1,8 +1,8 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { CsService } from './cs.service';
-import { HeaderGuard } from '@/common/guards/header.guard';
-import { ApiHeader, ApiResponse } from '@nestjs/swagger';
+import { AuthGuard } from '@/common/guards/auth.guard';
 import { apiHeader } from '@/constants/api-header';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { ApiHeader, ApiResponse } from '@nestjs/swagger';
+import { CsService } from './cs.service';
 import { GetNamesDto } from './dto/get-names.dto';
 
 @Controller('cpm/cs')
@@ -18,7 +18,7 @@ export class CsController {
     description: 'The names have been successfully retrieved.',
     type: [GetNamesDto],
   })
-  @UseGuards(HeaderGuard)
+  @UseGuards(AuthGuard)
   @Get("/names")
   async getNames() {
     return this.csService.getNames();
