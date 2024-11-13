@@ -1,6 +1,6 @@
 import { SigninDto } from '@/api/auth/dto/signin.dto';
 import * as request from 'supertest';
-import { app, setupTestEnvironment, teardownTestEnvironment } from 'test/e2e/setup';
+import { app, envService, setupTestEnvironment, teardownTestEnvironment } from 'test/e2e/setup';
 
 describe('Auth (e2e)', () => {
   let accessToken: string;
@@ -16,8 +16,8 @@ describe('Auth (e2e)', () => {
     const response = await request(app.getHttpServer())
       .post('/auth/signin')
       .send({
-        userId: 'testuser',
-        password: 'testpass'
+        userId: envService.USER_ID,
+        password: envService.PASSWORD
       } satisfies SigninDto)
       .expect(200);
 

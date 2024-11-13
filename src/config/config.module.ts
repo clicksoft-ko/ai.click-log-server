@@ -3,12 +3,14 @@ import { Global, Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtConfig } from './jwt.config';
+import { EnvModule } from '@/modules/env/env.module';
 
 @Global()
 @Module({
   imports: [
     NestConfigModule.forRoot({ isGlobal: true, }),
     JwtModule.registerAsync({ useClass: JwtConfig, global: true }),
+    EnvModule,
   ],
   providers: [Logger],
 })
