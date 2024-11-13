@@ -18,9 +18,9 @@ describe('Auth (e2e)', () => {
       .send({
         userId: 'testuser',
         password: 'testpass'
-      } satisfies SigninDto)
-      .expect(200);
+      } satisfies SigninDto);
 
+    expect(response.status).toBe(200);
     accessToken = response.body.accessToken;
     expect(accessToken).toBeDefined();
   });
