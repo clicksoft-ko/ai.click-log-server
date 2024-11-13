@@ -17,10 +17,7 @@ export class AuthController {
   @Post("/signin")
   @HttpCode(200)
   async signin(@Body() dto: SigninDto): Promise<SigninResponseDto> {
-    return {
-      accessToken: 'test'
-    }
-    // return this.authService.signin(dto);
+    return this.authService.signin(dto);
   }
 
   @ApiResponse({

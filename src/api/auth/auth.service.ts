@@ -13,8 +13,10 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
+    const accessToken = await this.jwtService.signAsync({ isAuthenticated: true } satisfies AuthPayloadDto);
+
     return {
-      accessToken: await this.jwtService.signAsync({ isAuthenticated: true } satisfies AuthPayloadDto),
+      accessToken,
     };
   }
 
