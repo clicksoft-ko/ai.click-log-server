@@ -1,4 +1,4 @@
-import { SaveErrorLogDto } from '@/api/click/dto/save-error-log.dto';
+import { SaveErrorLogDto } from '@/api/click/error-log/dto/save-error-log.dto';
 import { apiHeader } from '@/constants/api-header';
 import * as request from 'supertest';
 import { app, setupTestEnvironment, teardownTestEnvironment } from 'test/e2e/setup';
