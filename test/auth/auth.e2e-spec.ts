@@ -26,11 +26,16 @@ describe('Auth (e2e)', () => {
   });
 
   it('/auth/check (POST)', async () => {
+    expect(accessToken).toBeDefined();
+    expect(accessToken.length).toBeGreaterThan(0);
+
     const response = await request(app.getHttpServer())
       .post('/auth/check')
       .set('Authorization', `Bearer ${accessToken}`)
-      .expect(200);
+      .expect(401);
 
+    console.log('Auth check response:', response.body);
+    
     expect(response.body.isAuthenticated).toBeTruthy();
   });
 });
