@@ -4,12 +4,20 @@ import { app, envService, setupTestEnvironment, teardownTestEnvironment } from '
 
 describe('Auth (e2e)', () => {
   let accessToken: string;
+  
   beforeAll(async () => {
-    await setupTestEnvironment()
-  });
+    await setupTestEnvironment();
+    
+    const signinResponse = await request(app.getHttpServer())
+      .post('/auth/signin')
+      .send({
+        userId: envService.USER_ID,
+        password: envService.PASSWORD
+      } satisfies SigninDto)
+      .expect(200);
 
-  afterAll(async () => {
-    await teardownTestEnvironment()
+    accessToken = signinResponse.body.accessToken;
+    expect(accessToken).toBeDefined();
   });
 
   it('/auth/signin (POST)', async () => {
@@ -21,21 +29,15 @@ describe('Auth (e2e)', () => {
       } satisfies SigninDto)
       .expect(200);
 
-    accessToken = response.body.accessToken;
-    expect(accessToken).toBeDefined();
+    expect(response.body.accessToken).toBeDefined();
   });
 
   it('/auth/check (POST)', async () => {
-    expect(accessToken).toBeDefined();
-    expect(accessToken.length).toBeGreaterThan(0);
-
     const response = await request(app.getHttpServer())
       .post('/auth/check')
       .set('Authorization', `Bearer ${accessToken}`)
-      .expect(401);
+      .expect(200);
 
-    console.log('Auth check response:', response.body);
-    
     expect(response.body.isAuthenticated).toBeTruthy();
   });
 });
