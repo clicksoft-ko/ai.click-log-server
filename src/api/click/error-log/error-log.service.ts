@@ -6,11 +6,11 @@ import { SaveErrorLogDto } from './dto/save-error-log.dto';
 export class ErrorLogService {
   constructor(private prisma: ClickPrismaService) { }
 
-  getErrorLogs({ startDate, endDate }: { startDate: string, endDate: string }) {
-    const isoStartDate = new Date(startDate);
-    const isoEndDate = new Date(endDate);
+  async getErrorLogs({ startDate, endDate }: { startDate: string, endDate: string }) {
+    const isoStartDate = new Date(startDate).toISOString();
+    const isoEndDate = new Date(endDate).toISOString();
 
-    return this.prisma.errorLog.findMany({
+    return await this.prisma.errorLog.findMany({
       where: {
         createdAt: { gte: isoStartDate, lte: isoEndDate },
       },
