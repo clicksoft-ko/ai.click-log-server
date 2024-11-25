@@ -6,26 +6,14 @@ import { SaveErrorLogDto } from './dto/save-error-log.dto';
 export class ErrorLogService {
   constructor(private prisma: ClickPrismaService) { }
 
-  async getErrorLogs({ 
-    startDate, 
-    endDate, 
-    cursor, 
-    take = 20 
-  }: { 
-    startDate: string, 
-    endDate: string,
-    cursor?: number,
-    take?: number 
-  }) {
+  async getErrorLogs({ startDate, endDate }: { startDate: string, endDate: string }) {
     const isoStartDate = new Date(startDate).toISOString();
     const isoEndDate = new Date(endDate).toISOString();
 
     return await this.prisma.errorLog.findMany({
       where: {
         createdAt: { gte: isoStartDate, lte: isoEndDate },
-        ...(cursor && { id: { lt: cursor } })
       },
-      take,
       select: {
         id: true,
         createdAt: true,
@@ -39,7 +27,7 @@ export class ErrorLogService {
         additionalData: true,
         clientVersion: true,
       },
-      orderBy: { id: 'desc' },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
