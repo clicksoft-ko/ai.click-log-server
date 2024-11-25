@@ -42,14 +42,19 @@ export class ErrorLogController {
       'Transfer-Encoding': 'chunked',
     });
 
-    res.write("[");
+    const stream = new Readable({
+      read() {
+        // 한 번에 모든 데이터를 스트림으로 전송
+        this.push('[');
+        errorLogs.forEach((log, index) => {
+          this.push(`${index > 0 ? ',' : ''}${JSON.stringify(log)}`);
+        });
+        this.push(']');
+        this.push(null);
+      }
+    });
 
-    for (let i = 0; i < errorLogs.length; i++) {
-      if (i > 0) res.write(",");
-      res.write(JSON.stringify(errorLogs[i]));
-    }
-    res.write("]");
-    res.end();
+    stream.pipe(res);
   }
 
   @ApiResponse({
