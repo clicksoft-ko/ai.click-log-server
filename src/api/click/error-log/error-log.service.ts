@@ -13,7 +13,7 @@ export class ErrorLogService {
 
     const allResults: Partial<ErrorLog>[] = [];
     let skip = 0;
-    const take = 1000;
+    const take = 5000;
 
     while (true) {
       const batch = await this.prisma.errorLog.findMany({
