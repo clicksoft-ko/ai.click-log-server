@@ -10,6 +10,7 @@ import { GetErrorLogQueryDto, GetErrorLogSchema } from './dto/get-error-log.dto'
 import { ErrorLogSchema, SaveErrorLogDto } from './dto/save-error-log.dto';
 import { ErrorLogService } from './error-log.service';
 import { Readable } from 'stream';
+import { ErrorLog } from 'prisma/generated/click-schema-client';
 
 @Controller('click/error-log')
 export class ErrorLogController {
@@ -68,27 +69,16 @@ export class ErrorLogController {
     @Res() res: Response) {
     const errorLogs = await this.errorLogService.getErrorLogs(query);
 
-    const stream = new Readable({
-      objectMode: true,
-      read(this: Readable & { started: boolean; index: number }) {
-        if (!this.started) {
-          this.push('[');
-          this.started = true;
-          this.index = 0;
-          return;
-        }
+    // 스트림 생성을 위한 유틸리티 함수
+    function* generateJson(data: Partial<ErrorLog>[]) {
+      yield '[';
+      for (let i = 0; i < data.length; i++) {
+        yield i === 0 ? JSON.stringify(data[i]) : ',' + JSON.stringify(data[i]);
+      }
+      yield ']';
+    }
 
-        if (this.index < errorLogs.length) {
-          const prefix = this.index > 0 ? ',' : ''; // 첫 항목이 아니면 쉼표 추가
-          this.push(prefix + JSON.stringify(errorLogs[this.index]));
-          this.index++;
-        } else if (this.index === errorLogs.length) {
-          this.push(']'); // 배열 종료
-          this.push(null);
-          this.index++;
-        }
-      },
-    });
+    const stream = Readable.from(generateJson(errorLogs), { encoding: 'utf8' });
 
     res.set({
       'Content-Type': 'application/json',
