@@ -1,6 +1,7 @@
 import { ClickPrismaService } from '@/database/prisma/click-prisma.service';
 import { Injectable } from '@nestjs/common';
 import { SaveErrorLogDto } from './dto/save-error-log.dto';
+import { ErrorLog } from 'prisma/generated/click-schema-client';
 
 @Injectable()
 export class ErrorLogService {
@@ -10,25 +11,40 @@ export class ErrorLogService {
     const isoStartDate = new Date(startDate).toISOString();
     const isoEndDate = new Date(endDate).toISOString();
 
-    return await this.prisma.errorLog.findMany({
-      where: {
-        createdAt: { gte: isoStartDate, lte: isoEndDate },
-      },
-      select: {
-        id: true,
-        createdAt: true,
-        ykiho: true,
-        computerName: true,
-        moduleName: true,
-        logLevel: true,
-        exceptionType: true,
-        errorMessage: true,
-        source: true,
-        additionalData: true,
-        clientVersion: true,
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+    const allResults: Partial<ErrorLog>[] = [];
+    let skip = 0;
+    const take = 1000;
+
+    while (true) {
+      const batch = await this.prisma.errorLog.findMany({
+        where: {
+          createdAt: { gte: isoStartDate, lte: isoEndDate },
+        },
+        select: {
+          id: true,
+          createdAt: true,
+          ykiho: true,
+          computerName: true,
+          moduleName: true,
+          logLevel: true,
+          exceptionType: true,
+          errorMessage: true,
+          source: true,
+          additionalData: true,
+          clientVersion: true,
+        },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take,
+      });
+
+      if (batch.length === 0) break;
+      
+      allResults.push(...batch);
+      skip += take;
+    }
+
+    return allResults;
   }
 
   saveErrorLog(dto: SaveErrorLogDto, ip: string | undefined) {
