@@ -14,8 +14,9 @@ export class SlowQueryService {
       data: {
         computerName: dto.computerName,
         ykiho: dto.ykiho,
-        moduleName: dto.moduleName,
-        path: dto.path,
+        assemblyName: dto.assemblyName,
+        className: dto.className,
+        methodName: dto.methodName,
         queryString: dto.queryString,
         executionSeconds: dto.executionSeconds,
       },

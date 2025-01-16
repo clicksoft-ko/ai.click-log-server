@@ -21,8 +21,9 @@ describe('Auth (e2e)', () => {
       .send({
         ykiho: '10170068',
         computerName: 'test컴퓨터',
-        moduleName: 'test.exe',
-        path: 'main.js',
+        assemblyName: 'MyAssembly',
+        className: 'MyClass',
+        methodName: 'MyMethod',
         queryString: 'SELECT * FROM users',
         executionSeconds: 10.25,
       } satisfies SaveSlowQueryDto)
@@ -40,8 +41,9 @@ describe('Auth (e2e)', () => {
     expect(response.body).toBeInstanceOf(Array);
     expect(response.body[0]).toHaveProperty('ykiho');
     expect(response.body[0]).toHaveProperty('computerName');
-    expect(response.body[0]).toHaveProperty('moduleName');
-    expect(response.body[0]).toHaveProperty('path');
+    expect(response.body[0]).toHaveProperty('assemblyName');
+    expect(response.body[0]).toHaveProperty('className');
+    expect(response.body[0]).toHaveProperty('methodName');
     expect(response.body[0]).toHaveProperty('queryString');
     expect(response.body[0]).toHaveProperty('executionSeconds');
   });

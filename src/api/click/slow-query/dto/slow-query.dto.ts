@@ -7,11 +7,14 @@ export class SlowQueryDto {
   @ApiProperty({ description: '컴퓨터 이름', example: 'PC-001' })
   computerName: string;
 
-  @ApiProperty({ description: '모듈 이름', example: 'MainModule' })
-  moduleName: string;
+  @ApiProperty({ description: '어셈블리명', example: 'MyAssembly' })
+  assemblyName: string;
 
-  @ApiProperty({ description: '경로', example: 'cspMain/myFunction' })
-  path: string;
+  @ApiProperty({ description: '클래스명', example: 'MyClass' })
+  className: string;
+
+  @ApiProperty({ description: '메소드명', example: 'MyMethod' })
+  methodName: string;
 
   @ApiProperty({
     description: '쿼리 문자열',
