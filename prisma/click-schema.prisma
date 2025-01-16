@@ -39,3 +39,16 @@ model SettingRecord {
 
   @@map("setting_records")
 }
+
+model SlowQuery {
+  id               Int   @id @default(autoincrement())
+  ykiho            String   @db.VarChar(8)
+  computerName     String   @map("computer_name") @db.VarChar(50)
+  moduleName       String   @map("module_name") @db.VarChar(50)
+  path             String   @db.VarChar(50)
+  queryString      String   @map("query_string") @db.Text
+  executionSeconds Float    @map("execution_seconds")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("slow_queries")
+}

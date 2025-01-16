@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { z } from 'zod';
 
-export const GetErrorLogSchema = z.object({
+export const DateRangeSchema = z.object({
   startDate: z.string().datetime(),
   endDate: z.string().datetime(),
 });
 
-export class GetErrorLogQueryDto {
+export class DateRangeDto {
   @ApiProperty({ description: '조회 시작 날짜' })
   startDate: string;
 

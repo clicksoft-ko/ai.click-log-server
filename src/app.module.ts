@@ -11,8 +11,16 @@ import { PrismaModule } from './database/prisma/prisma.module';
 import { MonitoringModule } from './modules/monitoring/monitoring.module';
 
 @Module({
-  imports: [ConfigModule, ClickModule, PrismaModule, SurveyModule, MonitoringModule, CsModule, AuthModule],
+  imports: [
+    ConfigModule,
+    ClickModule,
+    PrismaModule,
+    SurveyModule,
+    MonitoringModule,
+    CsModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [...globalFilterProviders, AppService, Logger],
 })
-export class AppModule { }
+export class AppModule {}

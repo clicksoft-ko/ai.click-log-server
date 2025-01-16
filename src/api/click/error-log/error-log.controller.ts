@@ -2,21 +2,35 @@ import { ZodValidate } from '@/common/decorators/zod-validate';
 import { AuthGuard } from '@/common/guards/auth.guard';
 import { ZodValidationPipe } from '@/common/pipes/zod-validation.pipe';
 import { getIp } from '@/shared/utils/ip.util';
-import { Body, Controller, Get, Inject, Logger, LoggerService, Param, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Logger,
+  LoggerService,
+  Param,
+  Post,
+  Query,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { Request, Response } from 'express';
+import { ErrorLog } from 'prisma/generated/click-schema-client';
+import { Readable } from 'stream';
+import { DateRangeDto, DateRangeSchema } from '../dto/date-range.dto';
 import { ErrorLogStacktraceDto } from './dto/error-log-stacktrace.dto';
-import { GetErrorLogQueryDto, GetErrorLogSchema } from './dto/get-error-log.dto';
 import { ErrorLogSchema, SaveErrorLogDto } from './dto/save-error-log.dto';
 import { ErrorLogService } from './error-log.service';
-import { Readable } from 'stream';
-import { ErrorLog } from 'prisma/generated/click-schema-client';
 
 @Controller('click/error-log')
 export class ErrorLogController {
   constructor(
     private readonly errorLogService: ErrorLogService,
-    @Inject(Logger) private readonly logger: LoggerService) { }
+    @Inject(Logger) private readonly logger: LoggerService,
+  ) {}
 
   @Post()
   @ZodValidate(ErrorLogSchema)
@@ -27,10 +41,10 @@ export class ErrorLogController {
 
   @UseGuards(AuthGuard)
   @Get()
-  @ZodValidate(GetErrorLogSchema)
   async getErrorLogs(
-    @Query(new ZodValidationPipe(GetErrorLogSchema)) query: GetErrorLogQueryDto,
-    @Res() res: Response) {
+    @Query(new ZodValidationPipe(DateRangeSchema)) query: DateRangeDto,
+    @Res() res: Response,
+  ) {
     const errorLogs = await this.errorLogService.getErrorLogs(query);
 
     // 스트림 생성을 위한 유틸리티 함수
@@ -52,14 +66,13 @@ export class ErrorLogController {
     stream.pipe(res);
   }
 
-
   @ApiResponse({
     description: 'The stacktrace has been successfully retrieved.',
     type: ErrorLogStacktraceDto,
   })
   @UseGuards(AuthGuard)
-  @Get("/:id/stacktrace")
-  getStacktrace(@Param("id") id: string) {
+  @Get('/:id/stacktrace')
+  getStacktrace(@Param('id') id: string) {
     return this.errorLogService.getStacktrace(parseInt(id));
   }
 }
