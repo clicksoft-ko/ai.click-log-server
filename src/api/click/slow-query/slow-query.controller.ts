@@ -1,6 +1,6 @@
 import { ZodValidate } from '@/common/decorators/zod-validate';
 import { ZodValidationPipe } from '@/common/pipes/zod-validation.pipe';
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { YmdDto, YmdSchema } from '../dto/ymd.dto';
 import {
@@ -9,6 +9,7 @@ import {
 } from './dto/save-slow-query.dto';
 import { SlowQueryDto } from './dto/slow-query.dto';
 import { SlowQueryService } from './slow-query.service';
+import { AuthGuard } from '@/common/guards/auth.guard';
 
 @ApiTags('eClick - Slow Query')
 @Controller('click/slow-query')
@@ -22,9 +23,24 @@ export class SlowQueryController {
     return this.slowQueryService.saveSlowQuery(dto);
   }
 
+  @UseGuards(AuthGuard)
   @ApiResponse({ status: 200, type: SlowQueryDto })
   @Get()
-  getSlowQuery(@Query(new ZodValidationPipe(YmdSchema)) query: YmdDto) {
+  getSlowQuery(
+    @Query(new ZodValidationPipe(YmdSchema)) query: YmdDto,
+  ): Promise<
+    {
+      id: number;
+      ykiho: string;
+      computerName: string;
+      assemblyName: string;
+      className: string;
+      methodName: string;
+      queryString: string;
+      executionSeconds: number;
+      createdAt: Date;
+    }[]
+  > {
     return this.slowQueryService.getSlowQuery(query);
   }
 }
