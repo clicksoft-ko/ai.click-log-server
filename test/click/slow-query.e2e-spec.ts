@@ -1,5 +1,6 @@
 import { SaveSlowQueryDto } from '@/api/click/slow-query/dto/save-slow-query.dto';
 import * as request from 'supertest';
+import { signinTest } from 'test/e2e/common';
 import {
   app,
   setupTestEnvironment,
@@ -33,9 +34,11 @@ describe('Auth (e2e)', () => {
   });
 
   it('click/slow-query (GET)', async () => {
+    const { accessToken } = await signinTest(app);
     const response = await request(app.getHttpServer())
       .get('/click/slow-query')
       .query({ ymd: '20250116' })
+      .set('Authorization', `Bearer ${accessToken}`)
       .expect(200);
 
     expect(response.body).toBeInstanceOf(Array);
