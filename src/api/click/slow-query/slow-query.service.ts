@@ -26,13 +26,13 @@ export class SlowQueryService {
   }
 
   async getSlowQuery(query: YmdDto) {
-    const date = dayjs(query.ymd, 'YYYYMMDD');
+    const date = koDayjs(dayjs(query.ymd, 'YYYYMMDD'));
 
     const data = await this.prisma.slowQuery.findMany({
       where: {
         createdAt: {
-          gte: dayjs(date).startOf('day').toDate(),
-          lte: dayjs(date).endOf('day').toDate(),
+          gte: date.startOf('day').toDate(),
+          lte: date.endOf('day').toDate(),
         },
       },
     });
