@@ -1,17 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { winstonLogger } from './config/winston-logger.config';
-import { NestExpressApplication } from '@nestjs/platform-express'
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as compression from 'compression';
-import './shared/plugins';
 import { compressionConfig } from './config/compression.config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.set('trust proxy', true);
   app.use(compression(compressionConfig));
-  app.setGlobalPrefix("/api");
+  app.setGlobalPrefix('/api');
   app.enableCors();
   app.useLogger(winstonLogger);
 

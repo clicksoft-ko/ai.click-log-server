@@ -26,9 +26,7 @@ export class SlowQueryController {
   @UseGuards(AuthGuard)
   @ApiResponse({ status: 200, type: SlowQueryDto })
   @Get()
-  getSlowQuery(
-    @Query(new ZodValidationPipe(YmdSchema)) query: YmdDto,
-  ): Promise<
+  getSlowQuery(@Query(new ZodValidationPipe(YmdSchema)) query: YmdDto): Promise<
     {
       id: number;
       ykiho: string;
