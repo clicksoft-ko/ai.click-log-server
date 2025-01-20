@@ -19,6 +19,7 @@ export class SlowQueryService {
         methodName: dto.methodName,
         queryString: dto.queryString,
         executionSeconds: dto.executionSeconds,
+        ver: dto.ver,
       },
     });
 

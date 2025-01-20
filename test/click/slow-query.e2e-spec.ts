@@ -27,6 +27,7 @@ describe('Auth (e2e)', () => {
         methodName: 'MyMethod',
         queryString: 'SELECT * FROM users',
         executionSeconds: 10.25,
+        ver: '1.0.0',
       } satisfies SaveSlowQueryDto)
       .expect(201);
 

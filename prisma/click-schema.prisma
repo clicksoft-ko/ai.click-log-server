@@ -41,7 +41,7 @@ model SettingRecord {
 }
 
 model SlowQuery {
-  id               Int   @id @default(autoincrement())
+  id               Int      @id @default(autoincrement())
   ykiho            String   @db.VarChar(8)
   computerName     String   @map("computer_name") @db.VarChar(50)
   assemblyName     String   @map("assembly_name") @db.VarChar(50)
@@ -50,6 +50,7 @@ model SlowQuery {
   queryString      String   @map("query_string") @db.Text
   executionSeconds Float    @map("execution_seconds")
   createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+  ver              String?  @map("ver") @db.VarChar(20)
 
   @@map("slow_queries")
 }

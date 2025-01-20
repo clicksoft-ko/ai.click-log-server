@@ -9,6 +9,7 @@ export const SaveSlowQuerySchema = z.object({
   methodName: z.string(),
   queryString: z.string(),
   executionSeconds: z.number(),
+  ver: z.string(),
 });
 
 export class SaveSlowQueryDto implements z.infer<typeof SaveSlowQuerySchema> {
@@ -35,4 +36,7 @@ export class SaveSlowQueryDto implements z.infer<typeof SaveSlowQuerySchema> {
 
   @ApiProperty({ description: '실행 시간 (초)', example: 5.2 })
   executionSeconds: number;
+
+  @ApiProperty({ description: '버전', example: '1.0.0' })
+  ver: string;
 }
