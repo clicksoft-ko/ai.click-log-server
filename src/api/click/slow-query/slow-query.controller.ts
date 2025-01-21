@@ -1,6 +1,14 @@
 import { ZodValidate } from '@/common/decorators/zod-validate';
 import { ZodValidationPipe } from '@/common/pipes/zod-validation.pipe';
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { YmdDto, YmdSchema } from '../dto/ymd.dto';
 import {
@@ -10,6 +18,7 @@ import {
 import { SlowQueryDto } from './dto/slow-query.dto';
 import { SlowQueryService } from './slow-query.service';
 import { AuthGuard } from '@/common/guards/auth.guard';
+import { StackframeDto } from './dto/stackframe.dto';
 
 @ApiTags('eClick - Slow Query')
 @Controller('click/slow-query')
@@ -40,5 +49,12 @@ export class SlowQueryController {
     }[]
   > {
     return this.slowQueryService.getSlowQuery(query);
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiResponse({ status: 200, type: [StackframeDto] })
+  @Get('/:id/stackFrames')
+  getSlowQueryStackFrames(@Param('id') id: string) {
+    return this.slowQueryService.getSlowQueryStackFrames(parseInt(id));
   }
 }

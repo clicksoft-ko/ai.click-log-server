@@ -27,7 +27,7 @@ describe('Auth (e2e)', () => {
         methodName: 'MyMethod',
         queryString: 'SELECT * FROM users',
         executionSeconds: 10.25,
-        stackframes: [
+        stackFrames: [
           {
             assemblyName: 'MyAssembly',
             className: 'MyClass',
@@ -62,5 +62,23 @@ describe('Auth (e2e)', () => {
     expect(response.body[0]).toHaveProperty('methodName');
     expect(response.body[0]).toHaveProperty('queryString');
     expect(response.body[0]).toHaveProperty('executionSeconds');
+  });
+
+  it('click/slow-query/:id/stackFrames (GET)', async () => {
+    const { accessToken } = await signinTest(app);
+    const response = await request(app.getHttpServer())
+      .get('/click/slow-query/38/stackFrames')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .expect(200);
+
+    expect(response.body).toBeInstanceOf(Array);
+    expect(response.body[0]).toHaveProperty('assemblyName');
+    expect(response.body[0]).toHaveProperty('className');
+    expect(response.body[0]).toHaveProperty('methodName');
+    expect(response.body[0]).toHaveProperty('offset');
+    expect(response.body[0]).toHaveProperty('ilOffset');
+    expect(response.body[0]).toHaveProperty('columnNumber');
+    expect(response.body[0]).toHaveProperty('lineNumber');
+    expect(response.body[0]).toHaveProperty('fileName');
   });
 });

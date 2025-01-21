@@ -22,7 +22,7 @@ export const SaveSlowQuerySchema = z.object({
   methodName: z.string(),
   queryString: z.string(),
   executionSeconds: z.number(),
-  stackframes: z.array(StackFrameInfoSchema).optional(),
+  stackFrames: z.array(StackFrameInfoSchema).optional(),
   ver: z.string(),
 });
 
@@ -51,8 +51,8 @@ export class SaveSlowQueryDto implements z.infer<typeof SaveSlowQuerySchema> {
   @ApiProperty({ description: '실행 시간 (초)', example: 5.2 })
   executionSeconds: number;
 
-  @ApiProperty({ description: 'Stackframes?', type: [StackFrameInfo] })
-  stackframes?: StackFrameInfo[];
+  @ApiProperty({ description: 'StackFrames?', type: [StackFrameInfo] })
+  stackFrames?: StackFrameInfo[];
 
   @ApiProperty({ description: '버전', example: '1.0.0' })
   ver: string;

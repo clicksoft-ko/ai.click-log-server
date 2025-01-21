@@ -24,9 +24,9 @@ export class SlowQueryService {
         },
       });
 
-      if (dto.stackframes && dto.stackframes.length > 0) {
+      if (dto.stackFrames && dto.stackFrames.length > 0) {
         await tx.slowQueryStackFrame.createMany({
-          data: dto.stackframes.map((stackFrame) => ({
+          data: dto.stackFrames.map((stackFrame) => ({
             ...stackFrame,
             slowQueryId: slowQuery.id,
           })),
@@ -51,5 +51,13 @@ export class SlowQueryService {
       },
     });
     return data;
+  }
+
+  getSlowQueryStackFrames(id: number) {
+    return this.prisma.slowQueryStackFrame.findMany({
+      where: {
+        slowQueryId: id,
+      },
+    });
   }
 }
