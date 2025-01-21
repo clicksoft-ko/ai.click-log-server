@@ -41,16 +41,33 @@ model SettingRecord {
 }
 
 model SlowQuery {
-  id               Int      @id @default(autoincrement())
-  ykiho            String   @db.VarChar(8)
-  computerName     String   @map("computer_name") @db.VarChar(50)
-  assemblyName     String   @map("assembly_name") @db.VarChar(50)
-  className        String   @map("class_name") @db.VarChar(50)
-  methodName       String   @map("method_name") @db.VarChar(50)
-  queryString      String   @map("query_string") @db.Text
-  executionSeconds Float    @map("execution_seconds")
-  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
-  ver              String?  @map("ver") @db.VarChar(20)
+  id               Int          @id @default(autoincrement())
+  ykiho            String       @db.VarChar(8)
+  computerName     String       @map("computer_name") @db.VarChar(50)
+  assemblyName     String       @map("assembly_name") @db.VarChar(50)
+  className        String       @map("class_name") @db.VarChar(50)
+  methodName       String       @map("method_name") @db.VarChar(50)
+  queryString      String       @map("query_string") @db.Text
+  executionSeconds Float        @map("execution_seconds")
+  createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  ver              String?      @map("ver") @db.VarChar(20)
+  StackFrames       SlowQueryStackFrame[]
 
   @@map("slow_queries")
+}
+
+model SlowQueryStackFrame {
+  id           Int       @id @default(autoincrement())
+  slowQueryId  Int       @map("slow_query_id")
+  assemblyName String    @map("assembly_name") @db.VarChar(50)
+  className    String    @map("class_name") @db.VarChar(50)
+  methodName   String    @map("method_name") @db.VarChar(50)
+  offset       Int
+  ilOffset     Int       @map("il_offset")
+  columnNumber Int       @map("column_number")
+  lineNumber   Int       @map("line_number")
+  fileName     String?   @map("file_name") @db.VarChar(255)
+  slowQuery    SlowQuery @relation(fields: [slowQueryId], references: [id], onDelete: Cascade)
+
+  @@map("slow_query_stackframes")
 }

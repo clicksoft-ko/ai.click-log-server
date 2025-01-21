@@ -10,17 +10,30 @@ export class SlowQueryService {
   constructor(private prisma: ClickPrismaService) {}
 
   async saveSlowQuery(dto: SaveSlowQueryDto) {
-    const data = await this.prisma.slowQuery.create({
-      data: {
-        computerName: dto.computerName,
-        ykiho: dto.ykiho,
-        assemblyName: dto.assemblyName,
-        className: dto.className,
-        methodName: dto.methodName,
-        queryString: dto.queryString,
-        executionSeconds: dto.executionSeconds,
-        ver: dto.ver,
-      },
+    const data = await this.prisma.$transaction(async (tx) => {
+      const slowQuery = await tx.slowQuery.create({
+        data: {
+          computerName: dto.computerName,
+          ykiho: dto.ykiho,
+          assemblyName: dto.assemblyName,
+          className: dto.className,
+          methodName: dto.methodName,
+          queryString: dto.queryString,
+          executionSeconds: dto.executionSeconds,
+          ver: dto.ver,
+        },
+      });
+
+      if (dto.stackframes && dto.stackframes.length > 0) {
+        await tx.slowQueryStackFrame.createMany({
+          data: dto.stackframes.map((stackFrame) => ({
+            ...stackFrame,
+            slowQueryId: slowQuery.id,
+          })),
+        });
+      }
+
+      return slowQuery;
     });
 
     return data;

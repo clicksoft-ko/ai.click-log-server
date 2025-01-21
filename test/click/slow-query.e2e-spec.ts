@@ -27,6 +27,18 @@ describe('Auth (e2e)', () => {
         methodName: 'MyMethod',
         queryString: 'SELECT * FROM users',
         executionSeconds: 10.25,
+        stackframes: [
+          {
+            assemblyName: 'MyAssembly',
+            className: 'MyClass',
+            methodName: 'MyMethod',
+            offset: 0,
+            ilOffset: 0,
+            columnNumber: 1,
+            lineNumber: 1,
+            fileName: 'test.js',
+          },
+        ],
         ver: '1.0.0',
       } satisfies SaveSlowQueryDto)
       .expect(201);
@@ -38,7 +50,7 @@ describe('Auth (e2e)', () => {
     const { accessToken } = await signinTest(app);
     const response = await request(app.getHttpServer())
       .get('/click/slow-query')
-      .query({ ymd: '20250116' })
+      .query({ ymd: '20250121' })
       .set('Authorization', `Bearer ${accessToken}`)
       .expect(200);
 

@@ -1,5 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { z } from 'zod';
+import { StackFrameInfo } from './stack-frame-info.dto';
+
+// StackFrameInfo 클래스의 구조를 Zod 스키마로 정의
+const StackFrameInfoSchema = z.object({
+  assemblyName: z.string(),
+  className: z.string(),
+  methodName: z.string(),
+  offset: z.number(),
+  ilOffset: z.number(),
+  columnNumber: z.number(),
+  lineNumber: z.number(),
+  fileName: z.string().optional(),
+});
 
 export const SaveSlowQuerySchema = z.object({
   ykiho: z.string(),
@@ -9,6 +22,7 @@ export const SaveSlowQuerySchema = z.object({
   methodName: z.string(),
   queryString: z.string(),
   executionSeconds: z.number(),
+  stackframes: z.array(StackFrameInfoSchema).optional(),
   ver: z.string(),
 });
 
@@ -36,6 +50,9 @@ export class SaveSlowQueryDto implements z.infer<typeof SaveSlowQuerySchema> {
 
   @ApiProperty({ description: '실행 시간 (초)', example: 5.2 })
   executionSeconds: number;
+
+  @ApiProperty({ description: 'Stackframes?', type: [StackFrameInfo] })
+  stackframes?: StackFrameInfo[];
 
   @ApiProperty({ description: '버전', example: '1.0.0' })
   ver: string;
