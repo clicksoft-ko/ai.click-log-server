@@ -6,7 +6,7 @@ COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
 COPY prisma ./prisma
 
-RUN corepack enable pnpm && pnpm install --frozen-lockfile;
+RUN corepack enable pnpm && pnpm install;
 
 COPY . .
 
