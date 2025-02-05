@@ -21,7 +21,7 @@ export class ClickController {
   @ApiHeader({
     name: apiHeader.click.key,
     description: 'API를 사용하기 위해서 반드시 필요한 정보',
-    required: true,  // 헤더가 필수임을 명시
+    required: true,  
   })
   @ApiResponse({
     description: 'The setting record has been successfully created or updated.',
