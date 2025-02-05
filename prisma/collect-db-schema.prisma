@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/collect-db-schema-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("COLLECT_DATABASE_URL")
+}
+
+model ChKey {
+  id        Int      @id @default(autoincrement())
+  ykiho     String   @map("ykiho") @db.VarChar(8)
+  gubun     String   @map("gubun") @db.VarChar(1)
+  chasu     String   @map("chasu") @db.VarChar(1)
+  week      String   @map("week") @db.VarChar(1)
+  saup      String   @map("saup") @db.VarChar(2)
+  chart     String   @map("chart") @db.VarChar(8)
+  weibgu    String   @map("weibgu") @db.VarChar(1)
+  yuhyung   String   @map("yuhyung") @db.VarChar(2)
+  ackgubun  String   @map("ackgubun") @db.VarChar(3)
+  dup       Int      @map("dup")
+  symd      String   @map("symd") @db.VarChar(8)
+  eymd      String   @default("") @map("eymd") @db.VarChar(8)
+  ibymd     String   @default("") @map("ibymd") @db.VarChar(8)
+  fibymd    String   @default("") @map("fibymd") @db.VarChar(8)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  ChInfo    ChInfo[]
+  ChSk      ChSk[]
+  ChJy      ChJy[]
+  ChJc      ChJc[]
+
+  @@unique([ykiho, chart, symd, gubun, chasu, week, saup, weibgu, yuhyung, ackgubun, dup, eymd, ibymd, fibymd])
+  @@map("ch_key")
+}
+
+model ChInfo {
+  id        Int      @id @default(autoincrement())
+  keyId     Int      @map("key_id")
+  sex       String   @map("sex") @db.VarChar(1)
+  age       Int      @map("age")
+  birthday  String   @map("birthday") @db.VarChar(8)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  ChKey     ChKey    @relation(fields: [keyId], references: [id], onDelete: Cascade)
+
+  @@map("ch_info")
+}
+
+model ChSk {
+  id          Int      @id @default(autoincrement())
+  keyId       Int      @map("key_id")
+  code        String   @map("code") @db.VarChar(6)
+  ymd         String   @map("ymd") @db.VarChar(8)
+  specialCode String   @map("special_code") @db.VarChar(4)
+  result      String   @map("result") @db.VarChar(1)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  ChKey       ChKey    @relation(fields: [keyId], references: [id], onDelete: Cascade)
+
+  @@map("ch_sk")
+}
+
+model ChJy {
+  id        Int      @id @default(autoincrement())
+  keyId     Int      @map("key_id")
+  ycode     String   @map("ycode") @db.VarChar(9)
+  myung     String   @map("myung") @db.VarChar(100)
+  ilto      Float    @map("ilto") @db.DoublePrecision
+  haesu     Int      @map("haesu")
+  chongto   Int      @map("chongto")
+  gnDup     Int      @map("gn_dup")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  ChKey     ChKey    @relation(fields: [keyId], references: [id], onDelete: Cascade)
+
+  @@map("ch_jy")
+}
+
+model ChJc {
+  id        Int      @id @default(autoincrement())
+  keyId     Int      @map("key_id")
+  spGubun   String   @map("sp_gubun") @db.VarChar(1)
+  spCode    String   @map("sp_code") @db.VarChar(8)
+  gnDup     Int      @map("gn_dup")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  ChKey     ChKey    @relation(fields: [keyId], references: [id], onDelete: Cascade)
+
+  @@map("ch_jc")
+}

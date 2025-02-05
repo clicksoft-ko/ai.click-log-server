@@ -9,6 +9,7 @@ import { globalFilterProviders } from './common/filters/global-filter-providers'
 import { ConfigModule } from './config/config.module';
 import { PrismaModule } from './database/prisma/prisma.module';
 import { MonitoringModule } from './modules/monitoring/monitoring.module';
+import { CollectDbModule } from './api/collect-db/v1/collect-db.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { MonitoringModule } from './modules/monitoring/monitoring.module';
     MonitoringModule,
     CsModule,
     AuthModule,
+    CollectDbModule,
   ],
   controllers: [AppController],
   providers: [...globalFilterProviders, AppService, Logger],
