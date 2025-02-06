@@ -20,8 +20,9 @@ export class CollectDbService {
   ) {
     const existingChKey = await tx.chKey.findUnique({
       where: {
-        ykiho_chart_symd_gubun_chasu_week_saup_weibgu_yuhyung_ackgubun_dup_eymd_ibymd_fibymd:
+        ykiho_chart_symd_gubun_chasu_week_saup_weibgu_yuhyung_ackgubun_dup_hanbang_eymd_ibymd_fibymd:
           {
+            hanbang: dto.hanbang,
             ykiho: dto.ykiho,
             chart: dto.chart,
             symd: dto.symd,
@@ -47,6 +48,7 @@ export class CollectDbService {
   private async createChKey(tx: CollectDbPrismaService, dto: CreateChDto) {
     return await tx.chKey.create({
       data: {
+        hanbang: dto.hanbang,
         ykiho: dto.ykiho,
         ackgubun: dto.ackgubun,
         chart: dto.chart,

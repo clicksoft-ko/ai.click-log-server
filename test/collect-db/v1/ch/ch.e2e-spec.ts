@@ -21,6 +21,7 @@ describe('Auth (e2e)', () => {
       .post('/collect-db/v1/ch')
       .set(apiHeader.click.key, apiHeader.click.value)
       .send({
+        hanbang: false,
         ykiho: '10170068',
         ackgubun: 'A',
         chart: '00000001',

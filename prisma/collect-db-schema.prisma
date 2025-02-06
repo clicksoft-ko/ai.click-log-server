@@ -16,6 +16,7 @@ datasource db {
 
 model ChKey {
   id        Int      @id @default(autoincrement())
+  hanbang   Boolean  @map("hanbang")
   ykiho     String   @map("ykiho") @db.VarChar(8)
   gubun     String   @map("gubun") @db.VarChar(1)
   chasu     String   @map("chasu") @db.VarChar(1)
@@ -36,7 +37,7 @@ model ChKey {
   ChJy      ChJy[]
   ChJc      ChJc[]
 
-  @@unique([ykiho, chart, symd, gubun, chasu, week, saup, weibgu, yuhyung, ackgubun, dup, eymd, ibymd, fibymd])
+  @@unique([ykiho, chart, symd, gubun, chasu, week, saup, weibgu, yuhyung, ackgubun, dup, hanbang, eymd, ibymd, fibymd])
   @@map("ch_key")
 }
 

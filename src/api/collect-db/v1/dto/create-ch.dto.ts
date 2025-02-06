@@ -32,6 +32,7 @@ export const CreateChJcSchema = z.object({
 });
 
 export const CreateChSchema = z.object({
+  hanbang: z.boolean(),
   ykiho: z.string().length(8),
   gubun: z.string().length(1),
   chasu: z.string().length(1),
@@ -114,6 +115,9 @@ export class CreateChJcDto {
 }
 
 export class CreateChDto implements z.infer<typeof CreateChSchema> {
+  @ApiProperty({ description: '한방여부', example: true })
+  hanbang: boolean;
+
   @ApiProperty({ description: '요양기관기호', example: '12345678' })
   ykiho: string;
 
