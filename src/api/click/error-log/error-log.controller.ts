@@ -27,10 +27,7 @@ import { ErrorLogService } from './error-log.service';
 
 @Controller('click/error-log')
 export class ErrorLogController {
-  constructor(
-    private readonly errorLogService: ErrorLogService,
-    @Inject(Logger) private readonly logger: LoggerService,
-  ) {}
+  constructor(private readonly errorLogService: ErrorLogService) {}
 
   @Post()
   @ZodValidate(ErrorLogSchema)

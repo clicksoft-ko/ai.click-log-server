@@ -73,7 +73,8 @@ model ChJy {
   ilto      Float    @map("ilto") @db.DoublePrecision
   haesu     Int      @map("haesu")
   chongto   Int      @map("chongto")
-  gnDup     Int      @map("gn_dup")
+  wonnae    Boolean  @map("wonnae")
+  key       String   @map("key") @db.VarChar(10)
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
   ChKey     ChKey    @relation(fields: [keyId], references: [id], onDelete: Cascade)
 
@@ -83,9 +84,10 @@ model ChJy {
 model ChJc {
   id        Int      @id @default(autoincrement())
   keyId     Int      @map("key_id")
+  jyKey     String   @map("jy_key")
   spGubun   String   @map("sp_gubun") @db.VarChar(1)
   spCode    String   @map("sp_code") @db.VarChar(8)
-  gnDup     Int      @map("gn_dup")
+  chamgo    String   @map("chamgo") @db.Text
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
   ChKey     ChKey    @relation(fields: [keyId], references: [id], onDelete: Cascade)
 

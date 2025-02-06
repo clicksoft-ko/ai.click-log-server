@@ -20,7 +20,7 @@ export class CollectDbController {
   @HttpCode(204)
   @Post('ch')
   @ZodValidate(CreateChSchema)
-  create(@Body() dto: CreateChDto) {
-    this.collectDbService.createCh(dto);
+  async create(@Body() dto: CreateChDto) {
+    await this.collectDbService.createCh(dto);
   }
 }

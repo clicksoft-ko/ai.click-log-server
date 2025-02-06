@@ -20,13 +20,15 @@ export const CreateChJySchema = z.object({
   ilto: z.number(),
   haesu: z.number().int(),
   chongto: z.number().int(),
-  gnDup: z.number().int(),
+  wonnae: z.boolean(),
+  key: z.string().max(10),
 });
 
 export const CreateChJcSchema = z.object({
   spGubun: z.string().max(1),
   spCode: z.string().max(8),
-  gnDup: z.number().int(),
+  chamgo: z.string(),
+  jyKey: z.string(),
 });
 
 export const CreateChSchema = z.object({
@@ -74,7 +76,6 @@ export class CreateChSkDto {
   @ApiProperty({ description: '결과', example: 'Y' })
   result: string;
 }
-
 export class CreateChJyDto {
   @ApiProperty({ description: 'Y 코드', example: '123456789' })
   ycode: string;
@@ -91,8 +92,11 @@ export class CreateChJyDto {
   @ApiProperty({ description: '총토', example: 3 })
   chongto: number;
 
-  @ApiProperty({ description: 'GN 중복', example: 1 })
-  gnDup: number;
+  @ApiProperty({ description: '원내', example: true })
+  wonnae: boolean;
+
+  @ApiProperty({ description: '키', example: '1234567890' })
+  key: string;
 }
 
 export class CreateChJcDto {
@@ -102,8 +106,11 @@ export class CreateChJcDto {
   @ApiProperty({ description: 'SP 코드', example: '12345678' })
   spCode: string;
 
-  @ApiProperty({ description: 'GN 중복', example: 1 })
-  gnDup: number;
+  @ApiProperty({ description: '채모', example: 'Y' })
+  chamgo: string;
+
+  @ApiProperty({ description: '진료 매핑 코드', example: '1|1' })
+  jyKey: string;
 }
 
 export class CreateChDto implements z.infer<typeof CreateChSchema> {

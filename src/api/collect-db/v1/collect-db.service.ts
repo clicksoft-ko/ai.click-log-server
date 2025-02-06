@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateChDto } from './dto/create-ch.dto';
 import { CollectDbPrismaService } from '@/database/prisma/collect-db-prisma.service';
 

@@ -43,7 +43,8 @@ describe('Auth (e2e)', () => {
         jy: [
           {
             chongto: 1,
-            gnDup: 1,
+            wonnae: true,
+            key: '1|1',
             haesu: 1,
             ilto: 1,
             myung: '테스트 리보트릴 정',
@@ -60,9 +61,10 @@ describe('Auth (e2e)', () => {
         ],
         jc: [
           {
-            gnDup: 1,
             spCode: 'MX999',
             spGubun: 'B',
+            jyKey: '1|1',
+            chamgo: '참고사항입니다.',
           },
         ],
       } satisfies CreateChDto)
