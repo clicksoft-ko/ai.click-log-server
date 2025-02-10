@@ -57,6 +57,7 @@ model ChSk {
   id          Int      @id @default(autoincrement())
   keyId       Int      @map("key_id")
   code        String   @map("code") @db.VarChar(6)
+  myung       String   @map("myung") @db.VarChar(200)
   ymd         String   @map("ymd") @db.VarChar(8)
   specialCode String   @map("special_code") @db.VarChar(4)
   result      String   @map("result") @db.VarChar(1)
@@ -70,10 +71,12 @@ model ChJy {
   id        Int      @id @default(autoincrement())
   keyId     Int      @map("key_id")
   ycode     String   @map("ycode") @db.VarChar(9)
-  myung     String   @map("myung") @db.VarChar(100)
+  myung     String   @map("myung") @db.VarChar(200)
   ilto      Float    @map("ilto") @db.DoublePrecision
   haesu     Int      @map("haesu")
   chongto   Int      @map("chongto")
+  htoyak    Float    @map("htoyak") @db.DoublePrecision
+  yakgu     String   @map("yakgu") @db.VarChar(1)
   wonnae    Boolean  @map("wonnae")
   key       String   @map("key") @db.VarChar(10)
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz

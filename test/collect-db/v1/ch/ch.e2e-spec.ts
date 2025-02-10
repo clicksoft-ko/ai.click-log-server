@@ -43,11 +43,13 @@ describe('Auth (e2e)', () => {
         },
         jy: [
           {
-            chongto: 1,
             wonnae: true,
             key: '1|1',
-            haesu: 1,
             ilto: 1,
+            haesu: 2,
+            chongto: 1,
+            htoyak: 0.5,
+            yakgu: '3',
             myung: '테스트 리보트릴 정',
             ycode: '123456789',
           },
@@ -55,6 +57,7 @@ describe('Auth (e2e)', () => {
         sk: [
           {
             code: 'test',
+            myung: '테스트 상병',
             result: 'Y',
             specialCode: 'test',
             ymd: '20230101',

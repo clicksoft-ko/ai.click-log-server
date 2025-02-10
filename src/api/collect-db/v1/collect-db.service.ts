@@ -1,6 +1,6 @@
-import { HttpException, Injectable } from '@nestjs/common';
-import { CreateChDto } from './dto/create-ch.dto';
 import { CollectDbPrismaService } from '@/database/prisma/collect-db-prisma.service';
+import { Injectable } from '@nestjs/common';
+import { CreateChDto } from './dto/create-ch.dto';
 
 @Injectable()
 export class CollectDbService {

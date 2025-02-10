@@ -9,6 +9,7 @@ export const CreateChInfoSchema = z.object({
 
 export const CreateChSkSchema = z.object({
   code: z.string().max(6),
+  myung: z.string().max(200),
   ymd: z.string().length(8),
   specialCode: z.string().max(4),
   result: z.string().max(1),
@@ -16,10 +17,12 @@ export const CreateChSkSchema = z.object({
 
 export const CreateChJySchema = z.object({
   ycode: z.string().max(9),
-  myung: z.string().max(100),
+  myung: z.string().max(200),
   ilto: z.number(),
   haesu: z.number().int(),
   chongto: z.number().int(),
+  htoyak: z.number(),
+  yakgu: z.string().max(1),
   wonnae: z.boolean(),
   key: z.string().max(10),
 });
@@ -68,6 +71,9 @@ export class CreateChSkDto {
   @ApiProperty({ description: '코드', example: '123456' })
   code: string;
 
+  @ApiProperty({ description: '명칭', example: '상병 명칭' })
+  myung: string;
+
   @ApiProperty({ description: '날짜', example: '20230101' })
   ymd: string;
 
@@ -77,6 +83,7 @@ export class CreateChSkDto {
   @ApiProperty({ description: '결과', example: 'Y' })
   result: string;
 }
+
 export class CreateChJyDto {
   @ApiProperty({ description: 'Y 코드', example: '123456789' })
   ycode: string;
@@ -84,14 +91,20 @@ export class CreateChJyDto {
   @ApiProperty({ description: '명칭', example: '샘플 명칭' })
   myung: string;
 
-  @ApiProperty({ description: '일토', example: 1.5 })
+  @ApiProperty({ description: '일투', example: 1 })
   ilto: number;
 
-  @ApiProperty({ description: '해수', example: 2 })
+  @ApiProperty({ description: '횟수', example: 2 })
   haesu: number;
 
-  @ApiProperty({ description: '총토', example: 3 })
+  @ApiProperty({ description: '총투', example: 3 })
   chongto: number;
+
+  @ApiProperty({ description: '1회 투약량', example: 0.5 })
+  htoyak: number;
+
+  @ApiProperty({ description: '약가 구분', example: '3' }) 
+  yakgu: string;
 
   @ApiProperty({ description: '원내', example: true })
   wonnae: boolean;
