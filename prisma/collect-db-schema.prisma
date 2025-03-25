@@ -97,3 +97,14 @@ model ChJc {
 
   @@map("ch_jc")
 }
+model SkLikeCount {
+  id            Int      @id @default(autoincrement())
+  ycode         String   @db.VarChar(9)
+  skcode        String   @db.VarChar(6)
+  likesCount    Int      @default(0) @map("likes_count")
+  dislikesCount Int      @default(0) @map("dislikes_count")
+  updatedAt     DateTime @default(now()) @map("updated_at") @db.Timestamptz
+
+  @@unique([ycode, skcode])
+  @@map("sk_like_count")
+}

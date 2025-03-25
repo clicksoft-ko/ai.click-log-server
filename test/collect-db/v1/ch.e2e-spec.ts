@@ -7,7 +7,7 @@ import {
   teardownTestEnvironment,
 } from 'test/e2e/setup';
 
-describe('Auth (e2e)', () => {
+describe('collect-db ch(e2e)', () => {
   beforeAll(async () => {
     await setupCollectDbTestEnvironment();
   });
