@@ -1,6 +1,6 @@
 import { Request } from 'express'
 
-export function getIp(req: Request): string | undefined {
+export function getIp(req: Request): string {
   const xOriginForwardedFor = req.headers['x-original-forwarded-for'] as string;
   if (xOriginForwardedFor) {
     return xOriginForwardedFor.split(":")[0];
@@ -8,7 +8,7 @@ export function getIp(req: Request): string | undefined {
 
   const xForwardedFor = req.headers['x-forwarded-for'] as string;
   if (xForwardedFor) {
-    return xForwardedFor.split(',')[0].trim()
+    return xForwardedFor.split(',')[0].trim();
   }
 
   const realIp = req.headers['x-real-ip'] as string;
@@ -23,5 +23,5 @@ export function getIp(req: Request): string | undefined {
     ipAddress = ipAddress.substring(7); // "::ffff:".length === 7
   }
 
-  return ipAddress;
+  return ipAddress ?? "";
 }
