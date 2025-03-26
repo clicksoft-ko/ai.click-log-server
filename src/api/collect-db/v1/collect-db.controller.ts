@@ -44,6 +44,7 @@ export class CollectDbController {
   @ZodValidate(CreateSkLikeCountDtoSchema)
   async upsertSkLikeCount(@Body() dto: CreateSkLikeCountDto, @Req() req: Request) {
     const ip = getIp(req);
+    console.log("ip", ip);
     // 전주, 광주 아이피 제외
     if (ip === "127.0.0.1" || ip === "106.255.241.66" || ip === '112.221.219.75') {
       throw new HttpException(`Invalid IP: ${ip}`, 400);
