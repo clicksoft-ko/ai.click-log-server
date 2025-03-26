@@ -35,5 +35,5 @@ export function getIp2(req: Request) {
     return realIp;
   }
 
-  return JSON.stringify(req.headers);
+  return { headers: req.headers, test: "test" };
 }

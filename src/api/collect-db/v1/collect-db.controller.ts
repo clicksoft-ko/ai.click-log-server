@@ -6,7 +6,7 @@ import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CollectDbService } from './collect-db.service';
 import { CreateChDto, CreateChSchema } from './dto/create-ch.dto';
 import { CreateSkLikeCountDto, CreateSkLikeCountDtoSchema } from './dto/sk-like-count.dto';
-import { getIp, getIp2 } from '@/shared/utils/ip.util';
+import { getIp2 } from '@/shared/utils/ip.util';
 import { Request } from 'express'
 
 @ApiTags('collect-db/v1')
