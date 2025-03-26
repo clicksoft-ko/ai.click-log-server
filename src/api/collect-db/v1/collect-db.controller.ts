@@ -1,17 +1,24 @@
 import { ZodValidate } from '@/common/decorators/zod-validate';
 import { HeaderGuard } from '@/common/guards/header.guard';
 import { apiHeader } from '@/constants/api-header';
-import { Body, Controller, Get, HttpCode, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CollectDbService } from './collect-db.service';
 import { CreateChDto, CreateChSchema } from './dto/create-ch.dto';
 import { CreateSkLikeCountDto, CreateSkLikeCountDtoSchema } from './dto/sk-like-count.dto';
+import { getIp } from '@/shared/utils/ip.util';
+import { Request } from 'express'
 
 @ApiTags('collect-db/v1')
 @Controller('collect-db/v1')
 export class CollectDbController {
   constructor(private readonly collectDbService: CollectDbService) { }
 
+  @Get("get-ip")
+  async getHello(@Req() req: Request) {
+    return getIp(req);
+  }
+  
   @ApiHeader({
     name: apiHeader.click.key,
     description: 'API를 사용하기 위해서 반드시 필요한 정보',
