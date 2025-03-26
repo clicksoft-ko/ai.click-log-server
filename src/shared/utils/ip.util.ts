@@ -16,9 +16,12 @@ export function getIp(req: Request): string | undefined {
     return realIp;
   }
 
-  return req.ip as string;
-}
+  let ipAddress = req.ip as string;
 
-export function getIp2(req: Request) {
-  return req.headers;
+  // IPv6 주소 형식이면서 IPv4-mapped IPv6 주소인 경우 IPv4 주소 부분만 추출
+  if (ipAddress && ipAddress.startsWith('::ffff:')) {
+    ipAddress = ipAddress.substring(7); // "::ffff:".length === 7
+  }
+
+  return ipAddress;
 }

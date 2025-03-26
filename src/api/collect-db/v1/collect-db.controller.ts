@@ -1,13 +1,13 @@
 import { ZodValidate } from '@/common/decorators/zod-validate';
 import { HeaderGuard } from '@/common/guards/header.guard';
 import { apiHeader } from '@/constants/api-header';
-import { Body, Controller, Get, HttpCode, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpException, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CollectDbService } from './collect-db.service';
 import { CreateChDto, CreateChSchema } from './dto/create-ch.dto';
 import { CreateSkLikeCountDto, CreateSkLikeCountDtoSchema } from './dto/sk-like-count.dto';
-import { getIp2 } from '@/shared/utils/ip.util';
 import { Request } from 'express'
+import { getIp } from '@/shared/utils/ip.util';
 
 @ApiTags('collect-db/v1')
 @Controller('collect-db/v1')
@@ -16,7 +16,7 @@ export class CollectDbController {
 
   @Get("get-ip")
   async getHello(@Req() req: Request) {
-    return getIp2(req);
+    return getIp(req);
   }
 
   @ApiHeader({
@@ -42,7 +42,12 @@ export class CollectDbController {
   @HttpCode(204)
   @Post('sk-like-count')
   @ZodValidate(CreateSkLikeCountDtoSchema)
-  async upsertSkLikeCount(@Body() dto: CreateSkLikeCountDto) {
+  async upsertSkLikeCount(@Body() dto: CreateSkLikeCountDto, @Req() req: Request) {
+    const ip = getIp(req);
+    // 전주, 광주 아이피 제외
+    if (ip === "127.0.0.1" || ip === "106.255.241.66" || ip === '112.221.219.75') {
+      throw new HttpException(`Invalid IP: ${ip}`, 400);
+    }
     await this.collectDbService.upsertSkLikeCount(dto);
   }
 
