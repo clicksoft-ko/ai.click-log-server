@@ -6,7 +6,7 @@ import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CollectDbService } from './collect-db.service';
 import { CreateChDto, CreateChSchema } from './dto/create-ch.dto';
 import { CreateSkLikeCountDto, CreateSkLikeCountDtoSchema } from './dto/sk-like-count.dto';
-import { getIp } from '@/shared/utils/ip.util';
+import { getIp, getIp2 } from '@/shared/utils/ip.util';
 import { Request } from 'express'
 
 @ApiTags('collect-db/v1')
@@ -16,9 +16,9 @@ export class CollectDbController {
 
   @Get("get-ip")
   async getHello(@Req() req: Request) {
-    return getIp(req);
+    return getIp2(req);
   }
-  
+
   @ApiHeader({
     name: apiHeader.click.key,
     description: 'API를 사용하기 위해서 반드시 필요한 정보',
