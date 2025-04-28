@@ -7,7 +7,7 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { ApiHeader, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   SaveSettingRecordSchema,
   SettingRecordDto,
@@ -30,6 +30,7 @@ export class SettingRecordController {
   constructor(private readonly service: SettingRecordService) {}
 
   @Post('/:ykiho')
+  @ApiOperation({ summary: '특정 요양기관기호에 대한 설정 기록 저장' })
   async saveSettingRecord(
     @Param('ykiho', new ZodValidationPipe(ykihoSchema)) ykiho: string,
     @Body(new ZodValidationPipe(SaveSettingRecordSchema)) dto: SettingRecordDto,
@@ -41,9 +42,26 @@ export class SettingRecordController {
   }
 
   @Get('/:ykiho')
+  @ApiOperation({ summary: '요양기관기호로 설정 기록 조회' })
+  @ApiResponse({
+    status: 200,
+    description: '요양기관기호로 설정 기록 조회',
+    type: SettingRecordDto,
+  })
   async getSettingRecord(
     @Param('ykiho', new ZodValidationPipe(ykihoSchema)) ykiho: string,
   ) {
     return await this.service.getSettingRecord(ykiho);
+  }
+
+  @ApiOperation({ summary: '모든 설정 기록 조회' })
+  @ApiResponse({
+    status: 200,
+    description: '모든 설정 기록 조회',
+    type: [SettingRecordDto],
+  })
+  @Get('/')
+  async getAllSettingRecords() {
+    return await this.service.getAllSettingRecords();
   }
 }

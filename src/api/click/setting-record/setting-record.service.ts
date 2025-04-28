@@ -48,4 +48,12 @@ export class SettingRecordService {
     });
     return record?.data;
   }
+
+  async getAllSettingRecords() {
+    const records = await this.prisma.settingRecord.findMany();
+    return records.map((record) => ({
+      ykiho: record.ykiho,
+      data: record.data,
+    }));
+  }
 }
