@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class ErrorResponseDto {
   @ApiProperty({
@@ -26,11 +26,11 @@ export class ErrorResponseDto {
 
   @ApiProperty({
     description: '유효성 검사 오류가 발생한 필드와 해당 오류 메시지 목록',
-    type: 'object',  // Swagger에서 객체로 문서화
+    type: 'object', // Swagger에서 객체로 문서화
     additionalProperties: {
       type: 'array',
       items: { type: 'string' },
-      example: ["Required"]
+      example: ['Required'],
     },
     required: false,
   })

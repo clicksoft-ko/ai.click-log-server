@@ -11,6 +11,7 @@ import { query, Request, Response } from 'express';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { ZodError } from 'zod';
+import { CustomZodException } from '../exceptions/custom-zod.exception';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -70,15 +71,18 @@ export class AllExceptionsFilter implements ExceptionFilter {
         : (exceptionResponse['message'] as string);
     }
 
-    if (exception instanceof ZodError) {
+    if (exception instanceof CustomZodException) {
       const formattedIssues = exception.issues.map((issue) => {
-        const path = issue.path.join('.');
+        let path = issue.path.join('.');
         const message = issue.message;
-        return `"${path}": ${message}`;
+        if (exception.metadata?.type === 'param') {
+          path = exception.metadata.data ?? '';
+        }
+        return path ? `"${path}": ${message}` : message;
       });
 
       // Join all formatted issues into a single string
-      return `Validation error on (${formattedIssues.join('|')})`;
+      return `(${exception.metadata?.type}) Validation error on (${formattedIssues.join('|')})`;
     }
 
     if (
