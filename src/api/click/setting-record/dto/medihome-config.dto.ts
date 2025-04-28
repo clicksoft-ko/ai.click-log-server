@@ -40,6 +40,7 @@ export enum SmsType {
   kakako = 'kakako',
   etc = 'etc',
 }
+
 export class MedihomeConfig implements z.infer<typeof medihomeConfigSchema> {
   @ApiProperty({
     enum: MedihomeUse,

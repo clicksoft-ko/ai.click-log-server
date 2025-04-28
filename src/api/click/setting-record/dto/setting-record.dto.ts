@@ -20,6 +20,9 @@ export class SaveSettingResponseDto {
   @ApiProperty({ description: '마지막 업데이트 일시' })
   updatedAt: Date;
 
+  @ApiProperty({ description: '데이터' })
+  data: SettingRecordDto;
+
   constructor(data: SaveSettingResponseDto) {
     this.id = data.id;
     this.ykiho = data.ykiho;

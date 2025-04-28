@@ -1,5 +1,13 @@
-import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+  UsePipes,
+} from '@nestjs/common';
+import { ApiHeader, ApiTags } from '@nestjs/swagger';
 import {
   SaveSettingRecordSchema,
   SettingRecordDto,
@@ -7,9 +15,17 @@ import {
 import { ZodValidationPipe } from '@/common/pipes/zod-validation.pipe';
 import { ykihoSchema } from '../validators/common.validator';
 import { SettingRecordService } from './setting-record.service';
+import { apiHeader } from '@/constants/api-header';
+import { HeaderGuard } from '@/common/guards/header.guard';
 
 @ApiTags('(new,e)Click API')
-@Controller('setting-record')
+@ApiHeader({
+  name: apiHeader.click.key,
+  description: 'API를 사용하기 위해서 반드시 필요한 정보',
+  required: true,
+})
+@UseGuards(HeaderGuard)
+@Controller('click/setting-record')
 export class SettingRecordController {
   constructor(private readonly service: SettingRecordService) {}
 
@@ -25,9 +41,9 @@ export class SettingRecordController {
   }
 
   @Get('/:ykiho')
-  getSettingRecord(
+  async getSettingRecord(
     @Param('ykiho', new ZodValidationPipe(ykihoSchema)) ykiho: string,
   ) {
-    return { ykiho };
+    return await this.service.getSettingRecord(ykiho);
   }
 }

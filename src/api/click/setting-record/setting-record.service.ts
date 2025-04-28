@@ -38,6 +38,7 @@ export class SettingRecordService {
       id: record.id,
       ykiho: ykiho,
       updatedAt: new Date(),
+      data: record.data as any,
     });
   }
 

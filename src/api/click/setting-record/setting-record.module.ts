@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SettingRecordController } from './settings.controller';
+import { SettingRecordController } from './setting-record.controller';
 import { SettingRecordService } from './setting-record.service';
 
 @Module({
