@@ -130,6 +130,14 @@ export class MedihomeConfig implements z.infer<typeof medihomeConfigSchema> {
   requestSmsDefaultPrice?: number;
 
   @ApiProperty({
+    description: '직접전송 버튼 추가',
+    required: false,
+    type: Boolean,
+    example: true,
+  })
+  useDirectSendButton?: boolean;
+
+  @ApiProperty({
     description: '입원 중간수납 사용여부',
     required: false,
     type: Boolean,
