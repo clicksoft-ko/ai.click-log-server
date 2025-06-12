@@ -21,9 +21,26 @@ export class AsrequestService {
     const cs = await this.csService.getByCode(dto.yoyangno);
     cs?.emcode;
     if (!cs) {
-      throw new UnprocessableEntityException('해당 요양기관 코드에 대한 정보가 없습니다.');
+      throw new UnprocessableEntityException(
+        '해당 요양기관 코드에 대한 정보가 없습니다.',
+      );
     }
     const em = await this.emService.getByCode(cs.emcode ?? '');
+
+    // 유니크 키가 겹치면 예외
+    const existingRequest = await this.prisma.asrequest.findFirst({
+      where: {
+        ascode: dto.ascode,
+        asymd: ymd,
+        yoyangno: dto.yoyangno,
+      },
+    });
+
+    if (existingRequest) {
+      throw new UnprocessableEntityException(
+        '이미 해당 날짜에 신청된 부가서비스가 있습니다.',
+      );
+    }
 
     await this.prisma.asrequest.create({
       data: {
