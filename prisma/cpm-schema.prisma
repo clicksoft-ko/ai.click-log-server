@@ -186,3 +186,56 @@ model Cs {
   @@id([gubun, code])
   @@map("cs")
 }
+
+model Asrequest {
+  ascode        String  @map("as_ascode") @db.Char(3)
+  asmyung       String  @map("as_asmyung") @db.VarChar(20)
+  asymd         String  @map("as_asymd") @db.VarChar(8)
+  yoyangno      String  @map("as_yoyangno") @db.Char(8)
+  hosmyung      String  @map("as_hosmyung") @db.VarChar(60)
+  hosdamdang    String  @map("as_hosdamdang") @db.VarChar(20)
+  hosdamdangtel String  @map("as_hosdamdangtel") @db.VarChar(40)
+  damdangcode   String  @map("as_damdangcode") @db.VarChar(5)
+  damdangmyung  String  @map("as_damdangmyung") @db.VarChar(20)
+  asstate       String  @default("0") @map("as_asstate") @db.Char(1)
+  cymd          String  @map("as_cymd") @db.VarChar(8)
+  asjoin        String  @default("0") @map("as_asjoin") @db.Char(1)
+  etc1          String? @map("as_etc1") @db.VarChar(255)
+  etc2          String? @map("as_etc2") @db.VarChar(255)
+  etc3          String? @map("as_etc3") @db.VarChar(255)
+
+  @@id([ascode, asymd, yoyangno])
+  @@map("asrequest")
+}
+
+model Em {
+  code     String  @id @map("em_code") @db.Char(3)
+  password String? @map("em_password") @db.VarChar(100)
+  name     String? @map("em_name") @db.VarChar(10)
+  startYmd String? @map("em_startymd") @db.VarChar(8)
+  endYmd   String? @map("em_endymd") @db.VarChar(8)
+  jumin    String? @map("em_jumin") @db.VarChar(50)
+  hpTel    String? @map("em_hptel") @db.VarChar(20)
+  tel      String? @map("em_tel") @db.VarChar(20)
+  post     String? @map("em_post") @db.VarChar(6)
+  dup      Int?    @map("em_dup")
+  juso     String? @map("em_juso") @db.VarChar(60)
+  bunji    String? @map("em_bunji") @db.VarChar(60)
+  email    String? @map("em_email") @db.VarChar(60)
+  carNum   String? @map("em_carnum") @db.VarChar(20)
+  jisa     String? @map("em_jisa") @db.Char(3)
+  buCode   String? @map("em_bucode") @db.Char(3)
+  jik      String? @map("em_jik") @db.Char(3)
+  bigo     String? @map("em_bigo") @db.VarChar(60)
+  user     String? @map("em_user") @db.VarChar(20)
+  etc1     String? @map("em_etc1") @db.VarChar(60)
+  etc2     String? @map("em_etc2") @db.VarChar(60)
+  image    Bytes?  @map("em_image") @db.MediumBlob
+  gDay     String? @map("em_gday") @db.Char(5)
+  uDay     String? @map("em_uday") @db.Char(5)
+  etc3     String? @map("em_etc3") @db.VarChar(50)
+  etc4     String? @map("em_etc4") @db.VarChar(50)
+  etc5     String? @map("em_etc5") @db.VarChar(50)
+
+  @@map("em")
+}

@@ -10,6 +10,8 @@ import { ConfigModule } from './config/config.module';
 import { PrismaModule } from './database/prisma/prisma.module';
 import { MonitoringModule } from './modules/monitoring/monitoring.module';
 import { CollectDbModule } from './api/collect-db/v1/collect-db.module';
+import { AsrequestModule } from './api/cpm/asrequest/asrequest.module';
+import { EmModule } from './api/cpm/em/em.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { CollectDbModule } from './api/collect-db/v1/collect-db.module';
     CsModule,
     AuthModule,
     CollectDbModule,
+    AsrequestModule,
+    EmModule,
   ],
   controllers: [AppController],
   providers: [...globalFilterProviders, AppService, Logger],
