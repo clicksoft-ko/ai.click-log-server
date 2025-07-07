@@ -5,7 +5,7 @@ import { CsService } from '../cs/cs.service';
 import { EmService } from '../em/em.service';
 import { ApplyAsRequestResponseDto } from './dto/apply-asrequest-response.dto';
 import { ApplyAsRequestDto } from './dto/apply-asrequest.dto';
-import { MmsService } from '@/modules/mms/mms.service';
+import { MmsService } from '@/modules/sms/sms.service';
 
 @Injectable()
 export class AsrequestService {
@@ -67,7 +67,7 @@ export class AsrequestService {
     // 고객용 MMS 메시지
     await this.mmsService.sendMessage({
       phoneNumber: dto.hosdamdangtel,
-      message: dto.mmsMessage.customer,
+      message: dto.smsMessage.customer,
     });
 
     // if (em?.hpTel)

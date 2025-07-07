@@ -3,10 +3,10 @@ import { AsrequestController } from './asrequest.controller';
 import { AsrequestService } from './asrequest.service';
 import { CsService } from '../cs/cs.service';
 import { EmService } from '../em/em.service';
-import { MmsModule } from '@/modules/mms/mms.module';
+import { SmsModule } from '@/modules/sms/sms.module';
 
 @Module({
-  imports: [MmsModule],
+  imports: [SmsModule],
   controllers: [AsrequestController],
   providers: [AsrequestService, CsService, EmService],
 })

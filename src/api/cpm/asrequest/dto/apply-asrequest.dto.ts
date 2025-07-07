@@ -17,7 +17,7 @@ export const ApplyAsSchema = z.object({
     }),
     marketing: z.boolean(),
   }),
-  mmsMessage: z.object({
+  smsMessage: z.object({
     customer: z.string(),
     manager: z.string(),
   }),
@@ -37,7 +37,7 @@ export class Permission {
   marketing: boolean;
 }
 
-export class MmsMessage {
+export class SmsMessage {
   @ApiProperty({
     description: '고객용 메시지',
     example: '',
@@ -90,7 +90,7 @@ export class ApplyAsRequestDto implements z.infer<typeof ApplyAsSchema> {
 
   @ApiProperty({
     description: 'MMS 메시지 내용',
-    type: MmsMessage,
+    type: SmsMessage,
   })
-  mmsMessage: MmsMessage;
+  smsMessage: SmsMessage;
 }

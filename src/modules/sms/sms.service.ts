@@ -1,7 +1,7 @@
 import { SMS_DB_CONNECTION } from '@/common/providers/sms-db.providers';
 import { Inject, Injectable } from '@nestjs/common';
 import * as sql from 'mssql';
-import { SmsData } from './types/mms-data';
+import { SmsData } from './types/sms-data';
 import { EnvService } from '../env/env.service';
 
 @Injectable()

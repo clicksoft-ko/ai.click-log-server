@@ -12,7 +12,7 @@ import { MonitoringModule } from './modules/monitoring/monitoring.module';
 import { CollectDbModule } from './api/collect-db/v1/collect-db.module';
 import { AsrequestModule } from './api/cpm/asrequest/asrequest.module';
 import { EmModule } from './api/cpm/em/em.module';
-import { MmsModule } from './modules/mms/mms.module';
+import { SmsModule } from './modules/sms/sms.module';
 
 @Module({
   imports: [
@@ -26,7 +26,7 @@ import { MmsModule } from './modules/mms/mms.module';
     CollectDbModule,
     AsrequestModule,
     EmModule,
-    MmsModule,
+    SmsModule,
   ],
   controllers: [AppController],
   providers: [...globalFilterProviders, AppService, Logger],
