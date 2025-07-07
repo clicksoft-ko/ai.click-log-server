@@ -33,6 +33,7 @@ export const setupTestEnvironment = async (
   });
 
   moduleBuilder.overrideProvider(SMS_DB_CONNECTION).useValue(mockSqlPool);
+
   mockProviders.forEach((mockProvider) =>
     moduleBuilder
       .overrideProvider(mockProvider.provide)
@@ -51,6 +52,8 @@ export const setupCpmTestEnvironment = async (
   const moduleBuilder = Test.createTestingModule({
     imports: [AppModule],
   });
+
+  moduleBuilder.overrideProvider(SMS_DB_CONNECTION).useValue(mockSqlPool);
 
   mockProviders.forEach((mockProvider) =>
     moduleBuilder
@@ -72,6 +75,8 @@ export const setupCollectDbTestEnvironment = async (
   const moduleBuilder = Test.createTestingModule({
     imports: [AppModule],
   });
+
+  moduleBuilder.overrideProvider(SMS_DB_CONNECTION).useValue(mockSqlPool);
 
   mockProviders.forEach((mockProvider) =>
     moduleBuilder
