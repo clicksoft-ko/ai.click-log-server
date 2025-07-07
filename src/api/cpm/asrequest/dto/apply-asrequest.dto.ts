@@ -89,7 +89,7 @@ export class ApplyAsRequestDto implements z.infer<typeof ApplyAsSchema> {
   permission: Permission;
 
   @ApiProperty({
-    description: 'MMS 메시지 내용',
+    description: 'SMS 메시지 내용',
     type: SmsMessage,
   })
   smsMessage: SmsMessage;

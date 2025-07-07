@@ -5,7 +5,7 @@ import { SmsData } from './types/sms-data';
 import { EnvService } from '../env/env.service';
 
 @Injectable()
-export class MmsService {
+export class SmsService {
   constructor(
     @Inject(SMS_DB_CONNECTION) private pool: sql.ConnectionPool,
     private env: EnvService,
