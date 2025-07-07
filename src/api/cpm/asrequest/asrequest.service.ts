@@ -5,6 +5,7 @@ import { CsService } from '../cs/cs.service';
 import { EmService } from '../em/em.service';
 import { ApplyAsRequestResponseDto } from './dto/apply-asrequest-response.dto';
 import { ApplyAsRequestDto } from './dto/apply-asrequest.dto';
+import { MmsService } from '@/modules/mms/mms.service';
 
 @Injectable()
 export class AsrequestService {
@@ -12,6 +13,7 @@ export class AsrequestService {
     private readonly prisma: CpmPrismaService,
     private readonly csService: CsService,
     private readonly emService: EmService,
+    private readonly mmsService: MmsService,
   ) {}
 
   async applyAdditionalService(
@@ -61,6 +63,19 @@ export class AsrequestService {
         damdangmyung: em?.name || '',
       },
     });
+
+    // 고객용 MMS 메시지
+    await this.mmsService.sendMessage({
+      phoneNumber: dto.hosdamdangtel,
+      message: dto.mmsMessage.customer,
+    });
+
+    // if (em?.hpTel)
+    //   // 담당자용 MMS 메시지
+    //   await this.mmsService.sendMessage({
+    //     phoneNumber: em.hpTel,
+    //     message: dto.mmsMessage.manager,
+    //   });
 
     return { success: true };
   }

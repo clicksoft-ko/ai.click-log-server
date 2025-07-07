@@ -11,7 +11,45 @@ export const ApplyAsSchema = z.object({
     .trim(),
   hosdamdang: z.string().min(1, '담당자명은 필수입니다').trim(),
   hosdamdangtel: z.string().min(1, '담당자연락처는 필수입니다').trim(),
+  permission: z.object({
+    personalInfo: z.literal(true, {
+      errorMap: () => ({ message: '개인정보 수집 및 이용 동의는 필수입니다' }),
+    }),
+    marketing: z.boolean(),
+  }),
+  mmsMessage: z.object({
+    customer: z.string(),
+    manager: z.string(),
+  }),
 });
+
+export class Permission {
+  @ApiProperty({
+    description: '개인정보 수집 및 이용 동의',
+    example: true,
+  })
+  personalInfo: true;
+
+  @ApiProperty({
+    description: '마케팅 정보 수신 동의',
+    example: true,
+  })
+  marketing: boolean;
+}
+
+export class MmsMessage {
+  @ApiProperty({
+    description: '고객용 메시지',
+    example: '',
+  })
+  customer: string;
+
+  @ApiProperty({
+    description: '담당자용 메시지',
+    example: '',
+  })
+  manager: string;
+}
 
 export class ApplyAsRequestDto implements z.infer<typeof ApplyAsSchema> {
   @ApiProperty({
@@ -43,4 +81,16 @@ export class ApplyAsRequestDto implements z.infer<typeof ApplyAsSchema> {
     example: '01012345678',
   })
   hosdamdangtel: string;
+
+  @ApiProperty({
+    description: '개인정보 수집 및 이용 동의',
+    type: Permission,
+  })
+  permission: Permission;
+
+  @ApiProperty({
+    description: 'MMS 메시지 내용',
+    type: MmsMessage,
+  })
+  mmsMessage: MmsMessage;
 }
