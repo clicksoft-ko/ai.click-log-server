@@ -21,6 +21,7 @@ export const ApplyAsSchema = z.object({
     customer: z.string(),
     manager: z.string(),
   }),
+  email: z.string().email('유효한 이메일 주소를 입력하세요').optional(),
 });
 
 export class Permission {
@@ -93,4 +94,10 @@ export class ApplyAsRequestDto implements z.infer<typeof ApplyAsSchema> {
     type: SmsMessage,
   })
   smsMessage: SmsMessage;
+
+  @ApiProperty({
+    description: '이메일 주소',
+    example: 'example@example.com',
+  })
+  email: string;
 }

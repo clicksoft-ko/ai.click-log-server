@@ -64,6 +64,44 @@ export class AsrequestService {
       },
     });
 
+    if (dto.permission.personalInfo)
+      await this.prisma.pinfo.upsert({
+        where: { phone_type: { phone: dto.hosdamdangtel, type: '1' } },
+        create: {
+          phone: dto.hosdamdangtel,
+          type: '1',
+          name: dto.hosdamdang,
+          email: dto.email || '',
+          indate: ymd,
+          yoyangkiho: dto.yoyangno,
+        },
+        update: {
+          name: dto.hosdamdang,
+          email: dto.email || '',
+          yoyangkiho: dto.yoyangno,
+          indate: ymd,
+        },
+      });
+
+    if (dto.permission.marketing)
+      await this.prisma.pinfo.upsert({
+        where: { phone_type: { phone: dto.hosdamdangtel, type: '2' } },
+        create: {
+          phone: dto.hosdamdangtel,
+          type: '2',
+          name: dto.hosdamdang,
+          email: dto.email || '',
+          indate: ymd,
+          yoyangkiho: dto.yoyangno,
+        },
+        update: {
+          name: dto.hosdamdang,
+          email: dto.email || '',
+          yoyangkiho: dto.yoyangno,
+          indate: ymd,
+        },
+      });
+
     // 고객용 SMS 메시지
     await this.smsService.sendMessage({
       phoneNumber: dto.hosdamdangtel,
