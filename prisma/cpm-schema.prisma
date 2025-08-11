@@ -239,3 +239,18 @@ model Em {
 
   @@map("em")
 }
+
+model Pinfo {
+  name       String  @map("pi_name") @db.VarChar(100)
+  phone      String  @map("pi_phone") @db.VarChar(11)
+  indate     String  @map("pi_indate") @db.VarChar(8)
+  email      String  @map("pi_email") @db.VarChar(100)
+  yoyangkiho String  @map("pi_yoyangkiho") @db.VarChar(8)
+  type       String  @map("pi_type") @db.Char(1)
+  etc1       String? @map("pi_etc1") @db.VarChar(255)
+  etc2       String? @map("pi_etc2") @db.VarChar(255)
+  etc3       String? @map("pi_etc3") @db.VarChar(255)
+
+  @@id([phone, type])
+  @@map("pinfo")
+}

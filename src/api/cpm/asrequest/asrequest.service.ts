@@ -5,6 +5,10 @@ import { CsService } from '../cs/cs.service';
 import { EmService } from '../em/em.service';
 import { ApplyAsRequestResponseDto } from './dto/apply-asrequest-response.dto';
 import { ApplyAsRequestDto } from './dto/apply-asrequest.dto';
+import { SmsService } from '@/modules/sms/sms.service';
+import { Prisma, PrismaClient } from 'prisma/generated/cpm-schema-client/wasm';
+import { DefaultArgs } from 'prisma/generated/cpm-schema-client/runtime/library';
+import { CpmTransactionPrismaClient } from '@/common/types';
 
 @Injectable()
 export class AsrequestService {
@@ -12,7 +16,33 @@ export class AsrequestService {
     private readonly prisma: CpmPrismaService,
     private readonly csService: CsService,
     private readonly emService: EmService,
+    private readonly smsService: SmsService,
   ) {}
+
+  private async upsertPinfo(
+    tx: CpmTransactionPrismaClient,
+    dto: ApplyAsRequestDto,
+    type: string,
+    ymd: string,
+  ) {
+    await tx.pinfo.upsert({
+      where: { phone_type: { phone: dto.hosdamdangtel, type } },
+      create: {
+        phone: dto.hosdamdangtel,
+        type,
+        name: dto.hosdamdang,
+        email: dto.email || '',
+        indate: ymd,
+        yoyangkiho: dto.yoyangno,
+      },
+      update: {
+        name: dto.hosdamdang,
+        email: dto.email || '',
+        yoyangkiho: dto.yoyangno,
+        indate: ymd,
+      },
+    });
+  }
 
   async applyAdditionalService(
     dto: ApplyAsRequestDto,
@@ -42,25 +72,46 @@ export class AsrequestService {
       );
     }
 
-    await this.prisma.asrequest.create({
-      data: {
-        ascode: dto.ascode,
-        asmyung: dto.asmyung,
-        asymd: ymd,
-        yoyangno: dto.yoyangno,
-        hosdamdang: dto.hosdamdang,
-        hosdamdangtel: dto.hosdamdangtel,
-        cymd: '',
-        asjoin: '0',
-        asstate: '0',
-        etc1: '',
-        etc2: '',
-        etc3: '',
-        hosmyung: cs?.myung || '',
-        damdangcode: em?.code || '',
-        damdangmyung: em?.name || '',
-      },
+    // 트랜잭션으로 모든 DB 작업 수행
+    await this.prisma.$transaction(async (tx) => {
+      await tx.asrequest.create({
+        data: {
+          ascode: dto.ascode,
+          asmyung: dto.asmyung,
+          asymd: ymd,
+          yoyangno: dto.yoyangno,
+          hosdamdang: dto.hosdamdang,
+          hosdamdangtel: dto.hosdamdangtel,
+          cymd: '',
+          asjoin: '0',
+          asstate: '0',
+          etc1: '',
+          etc2: '',
+          etc3: '',
+          hosmyung: cs?.myung || '',
+          damdangcode: em?.code || '',
+          damdangmyung: em?.name || '',
+        },
+      });
+
+      if (dto.permission.personalInfo)
+        await this.upsertPinfo(tx, dto, '1', ymd);
+
+      if (dto.permission.marketing) await this.upsertPinfo(tx, dto, '2', ymd);
     });
+
+    // 고객용 SMS 메시지
+    await this.smsService.sendMessage({
+      phoneNumber: dto.hosdamdangtel,
+      message: dto.smsMessage.customer,
+    });
+
+    if (em?.hpTel)
+      // 담당자용 SMS 메시지
+      await this.smsService.sendMessage({
+        phoneNumber: em.hpTel,
+        message: dto.smsMessage.manager,
+      });
 
     return { success: true };
   }

@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EnvService {
-  constructor(private readonly configService: ConfigService) { }
+  constructor(private readonly configService: ConfigService) {}
   get JWT_KEY(): string {
     return this.configService.get<string>('JWT_KEY')!;
   }
@@ -17,11 +17,15 @@ export class EnvService {
   }
 
   get USER_ID(): string {
-    return this.IS_TEST ? 'testuser' : this.configService.get<string>('USER_ID')!;
+    return this.IS_TEST
+      ? 'testuser'
+      : this.configService.get<string>('USER_ID')!;
   }
 
   get PASSWORD(): string {
-    return this.IS_TEST ? 'testpass' : this.configService.get<string>('PASSWORD')!;
+    return this.IS_TEST
+      ? 'testpass'
+      : this.configService.get<string>('PASSWORD')!;
   }
 
   get CLICK_HEADER_KEY(): string {
@@ -30,5 +34,17 @@ export class EnvService {
 
   get CLICK_HEADER_VALUE(): string {
     return this.configService.get<string>('CLICK_HEADER_VALUE')!;
+  }
+
+  get SMS_DATABASE_CONFIG(): string {
+    return this.configService.get<string>('SMS_DATABASE_CONFIG')!;
+  }
+
+  get SMS_ID(): string {
+    return this.configService.get<string>('SMS_ID')!;
+  }
+
+  get SMS_CALLBACK(): string {
+    return this.configService.get<string>('SMS_CALLBACK')!;
   }
 }
