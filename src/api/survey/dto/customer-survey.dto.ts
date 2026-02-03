@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { CustomerSurvey, Prisma } from "prisma/generated/cpm-schema-client";
+import { ApiProperty } from '@nestjs/swagger';
+import { CustomerSurvey } from 'generated/cpm-schema-client';
 
 export class CustomerSurveyDto implements CustomerSurvey {
   @ApiProperty()
@@ -42,8 +42,8 @@ export class CustomerSurveyDto implements CustomerSurvey {
   q4_2: number;
   @ApiProperty()
   q4_3: number;
-  @ApiProperty({example: "", required: false})
+  @ApiProperty({ example: '', required: false })
   text1: string | null;
-  @ApiProperty({example: "", required: false})
+  @ApiProperty({ example: '', required: false })
   text2: string | null;
 }

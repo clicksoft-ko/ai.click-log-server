@@ -1,13 +1,19 @@
-import { ClickPrismaService } from '@/database/prisma/click-prisma.service';
 import { Injectable } from '@nestjs/common';
 import { SaveErrorLogDto } from './dto/save-error-log.dto';
-import { ErrorLog } from 'prisma/generated/click-schema-client';
+import { ClickPrismaService } from '@/database/prisma/click-prisma.service';
+import { ErrorLog } from 'generated/click-schema-client';
 
 @Injectable()
 export class ErrorLogService {
-  constructor(private prisma: ClickPrismaService) { }
+  constructor(private prisma: ClickPrismaService) {}
 
-  async getErrorLogs({ startDate, endDate }: { startDate: string, endDate: string }) {
+  async getErrorLogs({
+    startDate,
+    endDate,
+  }: {
+    startDate: string;
+    endDate: string;
+  }) {
     const isoStartDate = new Date(startDate).toISOString();
     const isoEndDate = new Date(endDate).toISOString();
 
@@ -39,7 +45,7 @@ export class ErrorLogService {
       });
 
       if (batch.length === 0) break;
-      
+
       allResults.push(...batch);
       skip += take;
     }
@@ -65,7 +71,10 @@ export class ErrorLogService {
   }
 
   async getStacktrace(id: number) {
-    const errorLog = await this.prisma.errorLog.findUnique({ select: { stackTrace: true }, where: { id } });
+    const errorLog = await this.prisma.errorLog.findUnique({
+      select: { stackTrace: true },
+      where: { id },
+    });
     return { stackTrace: errorLog?.stackTrace };
   }
 }

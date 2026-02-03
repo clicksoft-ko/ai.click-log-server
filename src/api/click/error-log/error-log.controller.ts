@@ -6,9 +6,6 @@ import {
   Body,
   Controller,
   Get,
-  Inject,
-  Logger,
-  LoggerService,
   Param,
   Post,
   Query,
@@ -18,12 +15,12 @@ import {
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { ErrorLog } from 'prisma/generated/click-schema-client';
 import { Readable } from 'stream';
 import { DateRangeDto, DateRangeSchema } from '../dto/date-range.dto';
 import { ErrorLogStacktraceDto } from './dto/error-log-stacktrace.dto';
 import { ErrorLogSchema, SaveErrorLogDto } from './dto/save-error-log.dto';
 import { ErrorLogService } from './error-log.service';
+import { ErrorLog } from 'generated/click-schema-client';
 
 @Controller('click/error-log')
 export class ErrorLogController {

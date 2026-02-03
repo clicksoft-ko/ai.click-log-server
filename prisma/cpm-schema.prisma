@@ -5,13 +5,13 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "./generated/cpm-schema-client"
+  provider     = "prisma-client-js"
+  output       = "../generated/cpm-schema-client"
+  moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "mysql"
-  url      = env("CPM_DATABASE_URL")
 }
 
 model CustomerSurvey {

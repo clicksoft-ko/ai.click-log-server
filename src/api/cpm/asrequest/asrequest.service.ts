@@ -6,9 +6,7 @@ import { EmService } from '../em/em.service';
 import { ApplyAsRequestResponseDto } from './dto/apply-asrequest-response.dto';
 import { ApplyAsRequestDto } from './dto/apply-asrequest.dto';
 import { SmsService } from '@/modules/sms/sms.service';
-import { Prisma, PrismaClient } from 'prisma/generated/cpm-schema-client/wasm';
-import { DefaultArgs } from 'prisma/generated/cpm-schema-client/runtime/library';
-import { CpmTransactionPrismaClient } from '@/common/types';
+import { Prisma } from 'generated/cpm-schema-client';
 
 @Injectable()
 export class AsrequestService {
@@ -20,7 +18,7 @@ export class AsrequestService {
   ) {}
 
   private async upsertPinfo(
-    tx: CpmTransactionPrismaClient,
+    tx: Prisma.TransactionClient,
     dto: ApplyAsRequestDto,
     type: string,
     ymd: string,

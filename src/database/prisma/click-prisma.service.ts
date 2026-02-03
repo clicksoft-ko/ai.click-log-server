@@ -1,10 +1,13 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from 'prisma/generated/click-schema-client';
-
+import { Injectable } from '@nestjs/common';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaClient } from 'generated/click-schema-client';
 
 @Injectable()
-export class ClickPrismaService extends PrismaClient implements OnModuleInit {
-  async onModuleInit() {
-    await this.$connect();
+export class ClickPrismaService extends PrismaClient {
+  constructor() {
+    const connectionString = `${process.env.CLICK_DATABASE_URL}`;
+
+    const adapter = new PrismaPg({ connectionString });
+    super({ adapter });
   }
 }

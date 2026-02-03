@@ -6,12 +6,12 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "./generated/click-schema-client"
+  output   = "../generated/click-schema-client"
+  moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("CLICK_DATABASE_URL")
 }
 
 model ErrorLog {
