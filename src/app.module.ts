@@ -13,6 +13,7 @@ import { CollectDbModule } from './api/collect-db/v1/collect-db.module';
 import { AsrequestModule } from './api/cpm/asrequest/asrequest.module';
 import { EmModule } from './api/cpm/em/em.module';
 import { SmsModule } from './modules/sms/sms.module';
+import { ClickSoftModule } from './api/clicksoft/clicksoft.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { SmsModule } from './modules/sms/sms.module';
     AsrequestModule,
     EmModule,
     SmsModule,
+    ClickSoftModule,
   ],
   controllers: [AppController],
   providers: [...globalFilterProviders, AppService, Logger],

@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/clicksoft-schema-client"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model LinuxBack {
+  id         String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ykiho      String        @db.VarChar(8)
+  key        String        @db.VarChar(20)
+  backupPath String        @map("backup_path") @db.Text
+  startedAt  DateTime      @map("started_at") @db.Timestamptz
+  endedAt    DateTime?     @map("ended_at") @db.Timestamptz
+  dbs        LinuxBackDb[]
+
+  @@unique([ykiho, key], map: "uk_ykiho_key")
+  @@map("linux_back")
+}
+
+model LinuxBackDb {
+  id        String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  backId    String          @map("back_id") @db.Uuid
+  dbName    String          @map("db_name") @db.VarChar(30)
+  elapsedMs Int             @map("elapsed_ms")
+  createdAt DateTime?       @default(now()) @map("created_at") @db.Timestamptz
+  back      LinuxBack       @relation(fields: [backId], references: [id])
+  tbls      LinuxBackTbl[]
+
+  @@map("linux_back_db")
+}
+
+model LinuxBackTbl {
+  id           BigInt       @id @default(autoincrement())
+  backDbId     String       @map("back_db_id") @db.Uuid
+  tblName      String       @map("tbl_name") @db.VarChar(30)
+  elapsedMs    Int          @map("elapsed_ms")
+  createdAt    DateTime?    @default(now()) @map("created_at") @db.Timestamptz
+  errorMessage String?      @map("error_message") @db.Text
+  backDb       LinuxBackDb  @relation(fields: [backDbId], references: [id])
+
+  @@map("linux_back_tbl")
+}
