@@ -1,6 +1,7 @@
 import { ZodValidate } from '@/common/decorators/zod-validate';
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { ZodValidationPipe } from '@/common/pipes/zod-validation.pipe';
 import { LinuxBackService } from './linux-back.service';
 import {
   CreateLinuxBackDto,
@@ -31,8 +32,10 @@ export class LinuxBackController {
   }
 
   @Patch(':id')
-  @ZodValidate(UpdateLinuxBackSchema)
-  update(@Param('id') id: string, @Body() dto: UpdateLinuxBackDto) {
+  update(
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(UpdateLinuxBackSchema)) dto: UpdateLinuxBackDto,
+  ) {
     return this.linuxBackService.updateLinuxBack(id, dto);
   }
 

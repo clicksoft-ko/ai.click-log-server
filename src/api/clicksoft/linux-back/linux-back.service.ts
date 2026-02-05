@@ -65,7 +65,7 @@ export class LinuxBackService {
   }
 
   async createLinuxBackTbl(dto: CreateLinuxBackTblDto) {
-    return this.prisma.linuxBackTbl.create({
+    const result = await this.prisma.linuxBackTbl.create({
       data: {
         backDbId: dto.backDbId,
         tblName: dto.tblName,
@@ -73,5 +73,10 @@ export class LinuxBackService {
         errorMessage: dto.errorMessage ?? null,
       },
     });
+
+    return {
+      ...result,
+      id: Number(result.id),
+    };
   }
 }
