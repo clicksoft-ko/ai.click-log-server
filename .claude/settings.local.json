@@ -5,7 +5,8 @@
       "mcp__context7__query-docs",
       "Bash(wc:*)",
       "Bash(npx vitest run)",
-      "Bash(npx jest:*)"
+      "Bash(npx jest:*)",
+      "Bash(node -e:*)"
     ]
   }
 }
