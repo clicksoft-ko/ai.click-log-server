@@ -3,6 +3,7 @@ import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ZodValidationPipe } from '@/common/pipes/zod-validation.pipe';
 import { LinuxBackService } from './linux-back.service';
+import { ykihoSchema } from '@/api/click/validators/common.validator';
 import {
   CreateLinuxBackDto,
   CreateLinuxBackSchema,
@@ -42,6 +43,13 @@ export class LinuxBackController {
   @Get('latest')
   getLatest() {
     return this.linuxBackService.getLatestLinuxBacks();
+  }
+
+  @Get('latest/:ykiho')
+  getLatestByYkiho(
+    @Param('ykiho', new ZodValidationPipe(ykihoSchema)) ykiho: string,
+  ) {
+    return this.linuxBackService.getLatestLinuxBackByYkiho(ykiho);
   }
 
   @Post('db')

@@ -1,13 +1,102 @@
 import { ClickSoftPrismaService } from '@/database/prisma/click-soft-prisma.service';
 import { Injectable } from '@nestjs/common';
+import type { Prisma } from 'generated/clicksoft-schema-client';
 import { CreateLinuxBackDto } from './dto/create-linux-back.dto';
 import { UpdateLinuxBackDto } from './dto/update-linux-back.dto';
 import { CreateLinuxBackDbDto } from './dto/create-linux-back-db.dto';
 import { CreateLinuxBackTblDto } from './dto/create-linux-back-tbl.dto';
 
+const linuxBackWithErrorTblsInclude = {
+  dbs: {
+    include: {
+      tbls: {
+        where: {
+          errorMessage: {
+            not: null,
+          },
+        },
+        select: {
+          tblName: true,
+          errorMessage: true,
+          createdAt: true,
+        },
+      },
+    },
+  },
+} as const satisfies Prisma.LinuxBackInclude;
+
+type LinuxBackWithErrorTbls = Prisma.LinuxBackGetPayload<{
+  include: typeof linuxBackWithErrorTblsInclude;
+}>;
+
+type LinuxBackDbWithErrorTbls = LinuxBackWithErrorTbls['dbs'][number];
+
 @Injectable()
 export class LinuxBackService {
   constructor(private prisma: ClickSoftPrismaService) {}
+
+  private async getLatestIdsByYkihoAndKey() {
+    const rows = await this.prisma.$queryRaw<Array<{ id: string }>>`
+      SELECT DISTINCT ON ("ykiho", "key") "id"
+      FROM "linux_back"
+      ORDER BY "ykiho", "key", "id" DESC
+    `;
+
+    return rows.map((row) => row.id);
+  }
+
+  private async getLatestIdsByKeyForYkiho(ykiho: string) {
+    const rows = await this.prisma.$queryRaw<Array<{ id: string }>>`
+      SELECT DISTINCT ON ("key") "id"
+      FROM "linux_back"
+      WHERE "ykiho" = ${ykiho}
+      ORDER BY "key", "id" DESC
+    `;
+
+    return rows.map((row) => row.id);
+  }
+
+  private async findLinuxBacksByIds(ids: string[]) {
+    if (ids.length === 0) {
+      return [];
+    }
+
+    const latestBacks = await this.prisma.linuxBack.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      orderBy: { id: 'desc' },
+      include: linuxBackWithErrorTblsInclude,
+    });
+
+    return latestBacks.map((back) => this.mapBackWithErrorLogs(back));
+  }
+
+  private mapBackWithErrorLogs(back: LinuxBackWithErrorTbls) {
+    return {
+      ...back,
+      dbs: back.dbs.map(({ tbls, ...db }: LinuxBackDbWithErrorTbls) => {
+        const errorLogs = tbls.flatMap((tbl) =>
+          tbl.errorMessage
+            ? [
+                {
+                  tblName: tbl.tblName,
+                  errorMessage: tbl.errorMessage,
+                  createdAt: tbl.createdAt,
+                },
+              ]
+            : [],
+        );
+
+        return {
+          ...db,
+          ...(errorLogs.length > 0 ? { errorLogs } : {}),
+        };
+      }),
+    };
+  }
 
   async createLinuxBack(dto: CreateLinuxBackDto) {
     return this.prisma.linuxBack.create({
@@ -29,28 +118,13 @@ export class LinuxBackService {
   }
 
   async getLatestLinuxBacks() {
-    const latestBacks = await this.prisma.linuxBack.findMany({
-      distinct: ['ykiho', 'key'],
-      orderBy: { startedAt: 'desc' },
-      include: {
-        dbs: {
-          include: {
-            tbls: true,
-          },
-        },
-      },
-    });
+    const latestIds = await this.getLatestIdsByYkihoAndKey();
+    return this.findLinuxBacksByIds(latestIds);
+  }
 
-    return latestBacks.map((back) => ({
-      ...back,
-      dbs: back.dbs.map((db) => ({
-        ...db,
-        tbls: db.tbls.map((tbl) => ({
-          ...tbl,
-          id: Number(tbl.id),
-        })),
-      })),
-    }));
+  async getLatestLinuxBackByYkiho(ykiho: string) {
+    const latestIds = await this.getLatestIdsByKeyForYkiho(ykiho);
+    return this.findLinuxBacksByIds(latestIds);
   }
 
   async createLinuxBackDb(dto: CreateLinuxBackDbDto) {
