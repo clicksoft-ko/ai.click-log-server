@@ -7,7 +7,7 @@ export class ClickSoftPrismaService extends PrismaClient {
   constructor() {
     const connectionString = `${process.env.CLICKSOFT_DATABASE_URL}`;
 
-    const adapter = new PrismaPg({ connectionString });
+    const adapter = new PrismaPg({ connectionString }, { schema: 'public' });
     super({ adapter });
   }
 }

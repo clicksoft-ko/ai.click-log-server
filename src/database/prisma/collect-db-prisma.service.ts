@@ -7,7 +7,7 @@ export class CollectDbPrismaService extends PrismaClient {
   constructor() {
     const connectionString = `${process.env.COLLECT_DATABASE_URL}`;
 
-    const adapter = new PrismaPg({ connectionString });
+    const adapter = new PrismaPg({ connectionString }, { schema: 'collect_db' });
     super({ adapter });
   }
 }

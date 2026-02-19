@@ -7,7 +7,7 @@ export class ClickPrismaService extends PrismaClient {
   constructor() {
     const connectionString = `${process.env.CLICK_DATABASE_URL}`;
 
-    const adapter = new PrismaPg({ connectionString });
+    const adapter = new PrismaPg({ connectionString }, { schema: 'click' });
     super({ adapter });
   }
 }
