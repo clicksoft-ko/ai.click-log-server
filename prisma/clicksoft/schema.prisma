@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/clicksoft-schema-client"
+  output   = "../../generated/clicksoft-schema-client"
   moduleFormat = "cjs"
 }
 
