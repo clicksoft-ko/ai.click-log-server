@@ -1,10 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { z } from 'zod';
 
+export const BackupTypeEnum = z.enum(['DB', 'FILE']);
+
 export const CreateLinuxBackSchema = z.object({
   id: z.string().uuid().optional(),
   ykiho: z.string().max(8),
   key: z.string().max(20),
+  backupType: BackupTypeEnum.default('DB'),
   backupPath: z.string(),
   startedAt: z.string().datetime(),
 });
@@ -18,6 +21,13 @@ export class CreateLinuxBackDto implements z.infer<typeof CreateLinuxBackSchema>
 
   @ApiProperty({ maxLength: 20, description: '백업 키' })
   key: string;
+
+  @ApiPropertyOptional({
+    enum: ['DB', 'FILE'],
+    default: 'DB',
+    description: '백업 유형 (DB: 데이터베이스, FILE: 파일)',
+  })
+  backupType: 'DB' | 'FILE';
 
   @ApiProperty({ description: '백업 경로' })
   backupPath: string;

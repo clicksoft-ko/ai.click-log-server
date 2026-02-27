@@ -1,10 +1,11 @@
 import { ZodValidate } from '@/common/decorators/zod-validate';
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ZodValidationPipe } from '@/common/pipes/zod-validation.pipe';
 import { LinuxBackService } from './linux-back.service';
 import { ykihoSchema } from '@/api/click/validators/common.validator';
 import {
+  BackupTypeEnum,
   CreateLinuxBackDto,
   CreateLinuxBackSchema,
 } from './dto/create-linux-back.dto';
@@ -41,15 +42,22 @@ export class LinuxBackController {
   }
 
   @Get('latest')
-  getLatest() {
-    return this.linuxBackService.getLatestLinuxBacks();
+  @ApiQuery({ name: 'backupType', enum: ['DB', 'FILE'], required: false })
+  getLatest(
+    @Query('backupType', new ZodValidationPipe(BackupTypeEnum.optional()))
+    backupType?: 'DB' | 'FILE',
+  ) {
+    return this.linuxBackService.getLatestLinuxBacks(backupType);
   }
 
   @Get('latest/:ykiho')
+  @ApiQuery({ name: 'backupType', enum: ['DB', 'FILE'], required: false })
   getLatestByYkiho(
     @Param('ykiho', new ZodValidationPipe(ykihoSchema)) ykiho: string,
+    @Query('backupType', new ZodValidationPipe(BackupTypeEnum.optional()))
+    backupType?: 'DB' | 'FILE',
   ) {
-    return this.linuxBackService.getLatestLinuxBackByYkiho(ykiho);
+    return this.linuxBackService.getLatestLinuxBackByYkiho(ykiho, backupType);
   }
 
   @Post('db')

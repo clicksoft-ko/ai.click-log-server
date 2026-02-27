@@ -1,6 +1,6 @@
 import { ClickSoftPrismaService } from '@/database/prisma/click-soft-prisma.service';
 import { Injectable } from '@nestjs/common';
-import type { Prisma } from 'generated/clicksoft-schema-client';
+import type { BackupType, Prisma } from 'generated/clicksoft-schema-client';
 import { CreateLinuxBackDto } from './dto/create-linux-back.dto';
 import { UpdateLinuxBackDto } from './dto/update-linux-back.dto';
 import { CreateLinuxBackDbDto } from './dto/create-linux-back-db.dto';
@@ -35,23 +35,37 @@ type LinuxBackDbWithErrorTbls = LinuxBackWithErrorTbls['dbs'][number];
 export class LinuxBackService {
   constructor(private prisma: ClickSoftPrismaService) {}
 
-  private async getLatestIdsByYkihoAndKey() {
-    const rows = await this.prisma.$queryRaw<Array<{ id: string }>>`
-      SELECT DISTINCT ON ("ykiho", "key") "id"
-      FROM "linux_back"
-      ORDER BY "ykiho", "key", "id" DESC
-    `;
+  private async getLatestIdsByYkihoAndKey(backupType?: BackupType) {
+    const rows = backupType
+      ? await this.prisma.$queryRaw<Array<{ id: string }>>`
+          SELECT DISTINCT ON ("ykiho", "key") "id"
+          FROM "linux_back"
+          WHERE "backup_type" = ${backupType}::"backup_type"
+          ORDER BY "ykiho", "key", "id" DESC
+        `
+      : await this.prisma.$queryRaw<Array<{ id: string }>>`
+          SELECT DISTINCT ON ("ykiho", "key") "id"
+          FROM "linux_back"
+          ORDER BY "ykiho", "key", "id" DESC
+        `;
 
     return rows.map((row) => row.id);
   }
 
-  private async getLatestIdsByKeyForYkiho(ykiho: string) {
-    const rows = await this.prisma.$queryRaw<Array<{ id: string }>>`
-      SELECT DISTINCT ON ("key") "id"
-      FROM "linux_back"
-      WHERE "ykiho" = ${ykiho}
-      ORDER BY "key", "id" DESC
-    `;
+  private async getLatestIdsByKeyForYkiho(ykiho: string, backupType?: BackupType) {
+    const rows = backupType
+      ? await this.prisma.$queryRaw<Array<{ id: string }>>`
+          SELECT DISTINCT ON ("key") "id"
+          FROM "linux_back"
+          WHERE "ykiho" = ${ykiho} AND "backup_type" = ${backupType}::"backup_type"
+          ORDER BY "key", "id" DESC
+        `
+      : await this.prisma.$queryRaw<Array<{ id: string }>>`
+          SELECT DISTINCT ON ("key") "id"
+          FROM "linux_back"
+          WHERE "ykiho" = ${ykiho}
+          ORDER BY "key", "id" DESC
+        `;
 
     return rows.map((row) => row.id);
   }
@@ -104,6 +118,7 @@ export class LinuxBackService {
         ...(dto.id && { id: dto.id }),
         ykiho: dto.ykiho,
         key: dto.key,
+        backupType: dto.backupType,
         backupPath: dto.backupPath,
         startedAt: new Date(dto.startedAt),
       },
@@ -117,13 +132,13 @@ export class LinuxBackService {
     });
   }
 
-  async getLatestLinuxBacks() {
-    const latestIds = await this.getLatestIdsByYkihoAndKey();
+  async getLatestLinuxBacks(backupType?: BackupType) {
+    const latestIds = await this.getLatestIdsByYkihoAndKey(backupType);
     return this.findLinuxBacksByIds(latestIds);
   }
 
-  async getLatestLinuxBackByYkiho(ykiho: string) {
-    const latestIds = await this.getLatestIdsByKeyForYkiho(ykiho);
+  async getLatestLinuxBackByYkiho(ykiho: string, backupType?: BackupType) {
+    const latestIds = await this.getLatestIdsByKeyForYkiho(ykiho, backupType);
     return this.findLinuxBacksByIds(latestIds);
   }
 
