@@ -5,7 +5,7 @@
       "@/*": ["./src/*"],
       "prisma/*": ["./prisma/*"],
       "test/*": ["./test/*"],
-      "generated/*": ["./generated/*"]
+      "generated/*": ["./src/generated/*"]
     }
   }
 }
