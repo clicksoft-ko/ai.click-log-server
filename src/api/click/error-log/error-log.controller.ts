@@ -20,7 +20,7 @@ import { DateRangeDto, DateRangeSchema } from '../dto/date-range.dto';
 import { ErrorLogStacktraceDto } from './dto/error-log-stacktrace.dto';
 import { ErrorLogSchema, SaveErrorLogDto } from './dto/save-error-log.dto';
 import { ErrorLogService } from './error-log.service';
-import { ErrorLog } from 'generated/click-schema-client';
+import { ErrorLog } from 'generated/click-schema-client/client';
 
 @Controller('click/error-log')
 export class ErrorLogController {

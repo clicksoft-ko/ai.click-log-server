@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from 'generated/collect-db-schema-client';
+import { PrismaClient } from 'generated/collect-db-schema-client/client';
 
 @Injectable()
 export class CollectDbPrismaService extends PrismaClient {

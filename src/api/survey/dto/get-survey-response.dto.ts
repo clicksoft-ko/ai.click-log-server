@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { SurveyPeriod } from 'generated/cpm-schema-client';
+import { SurveyPeriod } from 'generated/cpm-schema-client/client';
 
 export class GetSurveyResponseDto implements SurveyPeriod {
   @ApiProperty({

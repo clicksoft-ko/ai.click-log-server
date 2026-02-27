@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CustomerSurvey } from 'generated/cpm-schema-client';
+import { CustomerSurvey } from 'generated/cpm-schema-client/client';
 
 export class CustomerSurveyDto implements CustomerSurvey {
   @ApiProperty()

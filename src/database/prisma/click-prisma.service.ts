@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from 'generated/click-schema-client';
+import { PrismaClient } from 'generated/click-schema-client/client';
 
 @Injectable()
 export class ClickPrismaService extends PrismaClient {

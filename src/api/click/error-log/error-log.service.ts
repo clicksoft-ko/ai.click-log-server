@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SaveErrorLogDto } from './dto/save-error-log.dto';
 import { ClickPrismaService } from '@/database/prisma/click-prisma.service';
-import { ErrorLog } from 'generated/click-schema-client';
+import { ErrorLog } from 'generated/click-schema-client/client';
 
 @Injectable()
 export class ErrorLogService {

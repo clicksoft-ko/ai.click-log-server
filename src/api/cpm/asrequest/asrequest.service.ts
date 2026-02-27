@@ -6,7 +6,7 @@ import { EmService } from '../em/em.service';
 import { ApplyAsRequestResponseDto } from './dto/apply-asrequest-response.dto';
 import { ApplyAsRequestDto } from './dto/apply-asrequest.dto';
 import { SmsService } from '@/modules/sms/sms.service';
-import { Prisma } from 'generated/cpm-schema-client';
+import { Prisma } from 'generated/cpm-schema-client/client';
 
 @Injectable()
 export class AsrequestService {

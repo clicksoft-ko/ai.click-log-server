@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ErrorLog } from 'generated/click-schema-client';
+import { ErrorLog } from 'generated/click-schema-client/client';
 
 export class ErrorLogDto implements ErrorLog {
   @ApiProperty()

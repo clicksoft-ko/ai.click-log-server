@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from 'generated/clicksoft-schema-client';
+import { PrismaClient } from 'generated/clicksoft-schema-client/client';
 
 @Injectable()
 export class ClickSoftPrismaService extends PrismaClient {

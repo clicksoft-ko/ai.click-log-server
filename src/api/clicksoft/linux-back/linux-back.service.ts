@@ -1,6 +1,6 @@
 import { ClickSoftPrismaService } from '@/database/prisma/click-soft-prisma.service';
 import { Injectable } from '@nestjs/common';
-import type { BackupType, Prisma } from 'generated/clicksoft-schema-client';
+import type { BackupType, Prisma } from 'generated/clicksoft-schema-client/client';
 import { CreateLinuxBackDto } from './dto/create-linux-back.dto';
 import { UpdateLinuxBackDto } from './dto/update-linux-back.dto';
 import { CreateLinuxBackDbDto } from './dto/create-linux-back-db.dto';
