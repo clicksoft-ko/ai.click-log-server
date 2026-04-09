@@ -8,6 +8,11 @@ export class SettingRecordDto {
     description: '실손보험 설정',
   })
   medihome?: MedihomeConfig;
+  @ApiPropertyOptional({
+    description: '관리자 설정 전체 데이터',
+    example: [],
+  })
+  baseList?: any[];
 }
 
 export class SaveSettingResponseDto {
@@ -32,6 +37,7 @@ export class SaveSettingResponseDto {
 
 export const SaveSettingRecordSchema = z.object({
   medihome: medihomeConfigSchema.optional(),
+  baseList: z.array(z.any()).optional(),
 });
 
 export class SaveSettingRequestDto
@@ -39,4 +45,7 @@ export class SaveSettingRequestDto
 {
   @ApiPropertyOptional({ description: '실손보험 사용 여부', example: true })
   medihome?: MedihomeConfig;
+
+  @ApiPropertyOptional({ description: '관리자 설정 전체 데이터', example: [] })
+  baseList?: any[];
 }

@@ -23,9 +23,9 @@ export class SettingRecordService {
     const data: SettingRecordDto =
       (existingRecord?.data as SettingRecordDto) || {};
 
-    if (dto.medihome) {
-      data.medihome = dto.medihome;
-    }
+    if (dto.medihome) data.medihome = dto.medihome;
+    if (dto.baseList) data.baseList = dto.baseList;
+    
     const newTypedData: Record<string, any> = data;
 
     const record = await this.prisma.settingRecord.upsert({
