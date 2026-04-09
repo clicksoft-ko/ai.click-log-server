@@ -9,6 +9,7 @@ import { compressionConfig } from './config/compression.config';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.set('trust proxy', true);
+  app.useBodyParser('json', { limit: '10mb' });
   app.use(compression(compressionConfig));
   app.setGlobalPrefix('/api');
   app.enableCors();
