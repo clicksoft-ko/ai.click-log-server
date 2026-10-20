@@ -6,6 +6,7 @@ import {
   Body,
   Controller,
   Get,
+  Logger,
   Param,
   Post,
   Query,
@@ -15,15 +16,16 @@ import {
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { Readable } from 'stream';
+import { streamJsonArray } from '@/shared/utils/stream-json.util';
 import { DateRangeDto, DateRangeSchema } from '../dto/date-range.dto';
 import { ErrorLogStacktraceDto } from './dto/error-log-stacktrace.dto';
 import { ErrorLogSchema, SaveErrorLogDto } from './dto/save-error-log.dto';
 import { ErrorLogService } from './error-log.service';
-import { ErrorLog } from 'generated/click-schema-client/client';
 
 @Controller('click/error-log')
 export class ErrorLogController {
+  private readonly logger = new Logger(ErrorLogController.name);
+
   constructor(private readonly errorLogService: ErrorLogService) {}
 
   @Post()
@@ -39,25 +41,12 @@ export class ErrorLogController {
     @Query(new ZodValidationPipe(DateRangeSchema)) query: DateRangeDto,
     @Res() res: Response,
   ) {
-    const errorLogs = await this.errorLogService.getErrorLogs(query);
-
-    // 스트림 생성을 위한 유틸리티 함수
-    function* generateJson(data: Partial<ErrorLog>[]) {
-      yield '[';
-      for (let i = 0; i < data.length; i++) {
-        yield i === 0 ? JSON.stringify(data[i]) : ',' + JSON.stringify(data[i]);
-      }
-      yield ']';
-    }
-
-    const stream = Readable.from(generateJson(errorLogs), { encoding: 'utf8' });
-
-    res.set({
-      'Content-Type': 'application/json',
-      'Transfer-Encoding': 'chunked',
-    });
-
-    stream.pipe(res);
+    await streamJsonArray(
+      res,
+      this.errorLogService.getErrorLogBatches(query),
+      (error) =>
+        this.logger.warn(`에러 로그 응답 스트리밍 중단: ${error.message}`),
+    );
   }
 
   @ApiResponse({

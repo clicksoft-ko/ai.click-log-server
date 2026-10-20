@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { SaveErrorLogDto } from './dto/save-error-log.dto';
 import { ClickPrismaService } from '@/database/prisma/click-prisma.service';
-import { ErrorLog } from 'generated/click-schema-client/client';
+import { paginateByIdDesc } from '@/shared/utils/stream-json.util';
+
+// 행 하나의 본문(에러 메시지·쿼리 문자열 등)에 길이 제한이 없어 배치를 작게 잡는다
+const BATCH_SIZE = 1000;
 
 @Injectable()
 export class ErrorLogService {
   constructor(private prisma: ClickPrismaService) {}
 
-  async getErrorLogs({
+  /** 기간 내 에러 로그를 배치 단위로 내보낸다 (결과 전체를 메모리에 모으지 않음) */
+  getErrorLogBatches({
     startDate,
     endDate,
   }: {
@@ -17,40 +21,32 @@ export class ErrorLogService {
     const isoStartDate = new Date(startDate).toISOString();
     const isoEndDate = new Date(endDate).toISOString();
 
-    const allResults: Partial<ErrorLog>[] = [];
-    let skip = 0;
-    const take = 5000;
-
-    while (true) {
-      const batch = await this.prisma.errorLog.findMany({
-        where: {
-          createdAt: { gte: isoStartDate, lte: isoEndDate },
-        },
-        select: {
-          id: true,
-          createdAt: true,
-          ykiho: true,
-          computerName: true,
-          moduleName: true,
-          logLevel: true,
-          exceptionType: true,
-          errorMessage: true,
-          source: true,
-          additionalData: true,
-          clientVersion: true,
-        },
-        orderBy: { createdAt: 'desc' },
-        skip,
-        take,
-      });
-
-      if (batch.length === 0) break;
-
-      allResults.push(...batch);
-      skip += take;
-    }
-
-    return allResults;
+    return paginateByIdDesc(
+      (cursor, take) =>
+        this.prisma.errorLog.findMany({
+          where: {
+            // endDate 는 포함하지 않는다 (하루 경계를 반열림 구간으로 맞춤)
+            createdAt: { gte: isoStartDate, lt: isoEndDate },
+            id: cursor === undefined ? undefined : { lt: cursor },
+          },
+          select: {
+            id: true,
+            createdAt: true,
+            ykiho: true,
+            computerName: true,
+            moduleName: true,
+            logLevel: true,
+            exceptionType: true,
+            errorMessage: true,
+            source: true,
+            additionalData: true,
+            clientVersion: true,
+          },
+          orderBy: { id: 'desc' },
+          take,
+        }),
+      BATCH_SIZE,
+    );
   }
 
   saveErrorLog(dto: SaveErrorLogDto, ip: string | undefined) {

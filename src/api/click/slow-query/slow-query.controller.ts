@@ -4,9 +4,11 @@ import {
   Body,
   Controller,
   Get,
+  Logger,
   Param,
   Post,
   Query,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -19,10 +21,14 @@ import { SlowQueryDto } from './dto/slow-query.dto';
 import { SlowQueryService } from './slow-query.service';
 import { AuthGuard } from '@/common/guards/auth.guard';
 import { StackframeDto } from './dto/stackframe.dto';
+import { streamJsonArray } from '@/shared/utils/stream-json.util';
+import { Response } from 'express';
 
 @ApiTags('eClick - Slow Query')
 @Controller('click/slow-query')
 export class SlowQueryController {
+  private readonly logger = new Logger(SlowQueryController.name);
+
   constructor(private readonly slowQueryService: SlowQueryService) {}
 
   @ApiResponse({ status: 201 })
@@ -33,22 +39,18 @@ export class SlowQueryController {
   }
 
   @UseGuards(AuthGuard)
-  @ApiResponse({ status: 200, type: SlowQueryDto })
+  @ApiResponse({ status: 200, type: [SlowQueryDto] })
   @Get()
-  getSlowQuery(@Query(new ZodValidationPipe(YmdSchema)) query: YmdDto): Promise<
-    {
-      id: number;
-      ykiho: string;
-      computerName: string;
-      assemblyName: string;
-      className: string;
-      methodName: string;
-      queryString: string;
-      executionSeconds: number;
-      createdAt: Date;
-    }[]
-  > {
-    return this.slowQueryService.getSlowQuery(query);
+  async getSlowQuery(
+    @Query(new ZodValidationPipe(YmdSchema)) query: YmdDto,
+    @Res() res: Response,
+  ) {
+    await streamJsonArray(
+      res,
+      this.slowQueryService.getSlowQueryBatches(query),
+      (error) =>
+        this.logger.warn(`슬로우 쿼리 응답 스트리밍 중단: ${error.message}`),
+    );
   }
 
   @UseGuards(AuthGuard)
