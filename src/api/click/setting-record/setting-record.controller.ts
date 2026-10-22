@@ -4,11 +4,13 @@ import {
   Get,
   Param,
   Post,
+  Query,
   UseGuards,
-  UsePipes,
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
+  GetSettingRecordQueryDto,
+  GetSettingRecordQuerySchema,
   SaveSettingRecordSchema,
   SettingRecordDto,
 } from './dto/setting-record.dto';
@@ -50,8 +52,10 @@ export class SettingRecordController {
   })
   async getSettingRecord(
     @Param('ykiho', new ZodValidationPipe(ykihoSchema)) ykiho: string,
+    @Query(new ZodValidationPipe(GetSettingRecordQuerySchema))
+    query: GetSettingRecordQueryDto,
   ) {
-    return await this.service.getSettingRecord(ykiho);
+    return await this.service.getSettingRecord(ykiho, query.code);
   }
 
   @ApiOperation({ summary: '모든 설정 기록 조회' })
@@ -61,7 +65,10 @@ export class SettingRecordController {
     type: [SettingRecordDto],
   })
   @Get('/')
-  async getAllSettingRecords() {
-    return await this.service.getAllSettingRecords();
+  async getAllSettingRecords(
+    @Query(new ZodValidationPipe(GetSettingRecordQuerySchema))
+    query: GetSettingRecordQueryDto,
+  ) {
+    return await this.service.getAllSettingRecords(query.code);
   }
 }

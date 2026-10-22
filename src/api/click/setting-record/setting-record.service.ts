@@ -42,18 +42,51 @@ export class SettingRecordService {
     });
   }
 
-  async getSettingRecord(ykiho: string) {
+  async getSettingRecord(ykiho: string, code?: string) {
     const record = await this.prisma.settingRecord.findUnique({
       where: { ykiho },
     });
-    return record?.data;
+    const data = record?.data as SettingRecordDto | undefined;
+    if (!data || code === undefined) {
+      return data;
+    }
+    return this.filterBaseListByCode(data, code);
   }
 
-  async getAllSettingRecords() {
+  async getAllSettingRecords(code?: string) {
     const records = await this.prisma.settingRecord.findMany();
-    return records.map((record) => ({
+    const result = records.map((record) => ({
       ykiho: record.ykiho,
-      data: record.data,
+      data: record.data as SettingRecordDto,
     }));
+    if (code === undefined) {
+      return result;
+    }
+
+    // code 가 일치하는 baseList 항목이 하나라도 있는 기관만 반환
+    return result
+      .map((record) => ({
+        ...record,
+        data: this.filterBaseListByCode(record.data, code),
+      }))
+      .filter((record) => (record.data?.baseList?.length ?? 0) > 0);
+  }
+
+  private filterBaseListByCode(
+    data: SettingRecordDto,
+    code: string,
+  ): SettingRecordDto {
+    if (!Array.isArray(data?.baseList)) {
+      return data;
+    }
+
+    const target = code.toLowerCase();
+    return {
+      ...data,
+      baseList: data.baseList.filter(
+        (item) =>
+          item?.code != null && String(item.code).toLowerCase() === target,
+      ),
+    };
   }
 }

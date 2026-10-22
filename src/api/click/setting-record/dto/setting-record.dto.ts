@@ -49,3 +49,17 @@ export class SaveSettingRequestDto
   @ApiPropertyOptional({ description: '관리자 설정 전체 데이터', example: [] })
   baseList?: any[];
 }
+
+export const GetSettingRecordQuerySchema = z.object({
+  code: z.string().optional(),
+});
+
+export class GetSettingRecordQueryDto
+  implements z.infer<typeof GetSettingRecordQuerySchema>
+{
+  @ApiPropertyOptional({
+    description: 'baseList code 검색 (대소문자 구분 없이 일치하는 항목만 반환)',
+    example: '1',
+  })
+  code?: string;
+}
