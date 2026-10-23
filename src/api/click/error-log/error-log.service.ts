@@ -29,6 +29,8 @@ export class ErrorLogService {
             createdAt: { gte: isoStartDate, lt: isoEndDate },
             id: cursor === undefined ? undefined : { lt: cursor },
           },
+          // 목록 화면이 쓰는 칸만 보낸다. additionalData(행마다 수백 자)·source 는
+          // 화면에서 쓰지 않는데 응답 크기의 절반 이상을 차지해 뺐다
           select: {
             id: true,
             createdAt: true,
@@ -38,8 +40,6 @@ export class ErrorLogService {
             logLevel: true,
             exceptionType: true,
             errorMessage: true,
-            source: true,
-            additionalData: true,
             clientVersion: true,
           },
           orderBy: { id: 'desc' },

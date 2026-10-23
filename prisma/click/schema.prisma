@@ -28,6 +28,7 @@ model ErrorLog {
   additionalData Json?    @map("additional_data")
   clientVersion  String   @default("") @map("client_version") @db.VarChar(20)
 
+  @@index([createdAt, ykiho], map: "idx_error_logs_created_at")
   @@map("error_logs")
 }
 
@@ -53,6 +54,7 @@ model SlowQuery {
   ver              String?               @map("ver") @db.VarChar(20)
   StackFrames      SlowQueryStackFrame[]
 
+  @@index([createdAt], map: "idx_slow_queries_created_at")
   @@map("slow_queries")
 }
 
@@ -69,5 +71,7 @@ model SlowQueryStackFrame {
   fileName     String?   @map("file_name") @db.VarChar(255)
   slowQuery    SlowQuery @relation(fields: [slowQueryId], references: [id], onDelete: Cascade)
 
+  // 상세 창의 호출 경로 조회·삭제 시 cascade 가 표 전체를 읽지 않도록
+  @@index([slowQueryId], map: "idx_slow_query_stackframes_slow_query_id")
   @@map("slow_query_stackframes")
 }

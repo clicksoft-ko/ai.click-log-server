@@ -34,6 +34,25 @@ describe('Auth (e2e)', () => {
     expect(response.body.ykiho).toBe("10001000");
   });
 
+  it('/error-log (Get) - 목록은 화면이 쓰는 칸만 보낸다', async () => {
+    const { accessToken } = await signinTest(app);
+    const startDate = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const endDate = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+    const response = await request(app.getHttpServer())
+      .get('/click/error-log')
+      .query({ startDate, endDate })
+      .set('Authorization', `Bearer ${accessToken}`)
+      .expect(200);
+
+    const log = response.body.find(
+      (row: { ykiho: string }) => row.ykiho === '10001000',
+    );
+    expect(log).toBeDefined();
+    expect(log.errorMessage).toBe('An unexpected error occurred.');
+    expect(log).not.toHaveProperty('additionalData');
+    expect(log).not.toHaveProperty('source');
+  });
+
   it('/error-log/:id/stacktrace/ (Get)', async () => {
     const { accessToken } = await signinTest(app);
     const response = await request(app.getHttpServer())
